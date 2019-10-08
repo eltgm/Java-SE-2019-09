@@ -68,7 +68,8 @@ class DIYarrayList<T> implements List<T> {
     @Override
     public boolean add(T t) {
         if (size < store.length) {
-            store[size++] = t;
+            store[size] = t;
+            size = size + 1;
             return true;
         } else {
             int newLength = store.length * 2;
