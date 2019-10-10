@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HelloOtus {
+class HelloOtus {
     private static final int MEASURE_COUNT = 1;
 
     public static void main(String... args) {
