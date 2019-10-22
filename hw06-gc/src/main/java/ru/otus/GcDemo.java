@@ -9,14 +9,10 @@ import javax.management.ObjectName;
 import javax.management.openmbean.CompositeData;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-/**
- * Created by tully.
- * <p>
- * Updated by Sergey
- */
 /*
 О формате логов
 http://openjdk.java.net/jeps/158
@@ -57,6 +53,20 @@ http://openjdk.java.net/jeps/158
 */
 
 public class GcDemo {
+    private static final Set<String> YOUNG_GC = new HashSet<>(3);
+    private static final Set<String> OLD_GC = new HashSet<>(3);
+
+    static {
+        YOUNG_GC.add("PS Scavenge");
+        YOUNG_GC.add("ParNew");
+        YOUNG_GC.add("G1 Young Generation");
+        YOUNG_GC.add("Copy");
+        OLD_GC.add("PS MarkSweep");
+        OLD_GC.add("ConcurrentMarkSweep");
+        OLD_GC.add("G1 Old Generation");
+        OLD_GC.add("MarkSweepCompact");
+    }
+
     public static void main(String... args) throws Exception {
         System.out.println("Starting pid: " + ManagementFactory.getRuntimeMXBean().getName());
         switchOnMonitoring();
@@ -64,7 +74,6 @@ public class GcDemo {
 
         int size = 5 * 1000 * 1500;
         int loopCounter = 1000;
-        //int loopCounter = 100000;
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 
         ObjectName name = new ObjectName("ru.otus:type=Benchmark");
@@ -82,46 +91,45 @@ public class GcDemo {
         for (GarbageCollectorMXBean gcbean : gcbeans) {
             System.out.println("GC name:" + gcbean.getName());
             NotificationEmitter emitter = (NotificationEmitter) gcbean;
-            //int timeCounter = 1;
+
             int[] timeCounter = {1};
-            final HashMap<String, BenchPair> infoMap = new HashMap<>(2);
+
+            long[] data = new long[4];
             NotificationListener listener = (notification, handback) -> {
+
                 if (notification.getType().equals(GarbageCollectionNotificationInfo.GARBAGE_COLLECTION_NOTIFICATION)) {
                     GarbageCollectionNotificationInfo info = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
                     String gcName = info.getGcName();
-                    String gcAction = info.getGcAction();
-                    String gcCause = info.getGcCause();
 
                     long startTime = info.getGcInfo().getStartTime();
                     long duration = info.getGcInfo().getDuration();
+
                     if (timeCounter[0] * 60000 >= startTime) {
-                        if (infoMap.get(gcName) == null) {
-                            BenchPair benchPair = new BenchPair();
-                            benchPair.setTimes(1);
-                            benchPair.setGcTime(duration);
-
-                            infoMap.put(gcName, benchPair);
-                        } else {
-                            final BenchPair benchPair = infoMap.get(gcName);
-                            long newDuration = benchPair.getGcTime() + duration;
-                            long newCounts = benchPair.getTimes() + 1;
-
-                            benchPair.setGcTime(newDuration);
-                            benchPair.setTimes(newCounts);
+                        if (YOUNG_GC.contains(gcName)) {
+                            data[0] += 1;
+                            data[1] += duration;
                         }
-                        //System.out.println("start:" + startTime + " Name:" + gcName + ", action:" + gcAction + ", gcCause:" + gcCause + "(" + duration + " ms)");
+                        if (OLD_GC.contains(gcName)) {
+                            data[2] += 1;
+                            data[3] += duration;
+                        }
                     } else {
                         timeCounter[0] += 1;
-                        infoMap.forEach((s, benchPair) -> {
-                            System.out.println(String.format("generation: %s, Times: %d, GC time: %d ms", s,
-                                    benchPair.getTimes(), benchPair.getGcTime()));
-                        });
-                        //infoMap.clear();
+                        if (data[0] != 0 && data[1] != 0)
+                            System.out.println(String.format("Young, Times: %d, GC time: %d ms",
+                                    data[0], data[1]));
+
+                        if (data[2] != 0 && data[3] != 0)
+                            System.out.println(String.format("Old, Times: %d, GC time: %d ms",
+                                    data[2], data[3]));
+
+                        for (int i = 0; i < 4; i++) {
+                            data[i] = 0;
+                        }
                     }
                 }
             };
             emitter.addNotificationListener(listener, null, null);
         }
     }
-
 }
