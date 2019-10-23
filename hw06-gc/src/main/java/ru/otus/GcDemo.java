@@ -56,6 +56,11 @@ public class GcDemo {
     private static final Set<String> YOUNG_GC = new HashSet<>(3);
     private static final Set<String> OLD_GC = new HashSet<>(3);
 
+    private static final int YOUNG_COUNT = 0;
+    private static final int YOUNG_TIME = 1;
+    private static final int OLD_COUNT = 2;
+    private static final int OLD_TIME = 3;
+
     static {
         YOUNG_GC.add("PS Scavenge");
         YOUNG_GC.add("ParNew");
@@ -106,22 +111,22 @@ public class GcDemo {
 
                     if (timeCounter[0] * 60000 >= startTime) {
                         if (YOUNG_GC.contains(gcName)) {
-                            data[0] += 1;
-                            data[1] += duration;
+                            data[YOUNG_COUNT] += 1;
+                            data[YOUNG_TIME] += duration;
                         }
                         if (OLD_GC.contains(gcName)) {
-                            data[2] += 1;
-                            data[3] += duration;
+                            data[OLD_COUNT] += 1;
+                            data[OLD_TIME] += duration;
                         }
                     } else {
                         timeCounter[0] += 1;
-                        if (data[0] != 0 && data[1] != 0)
+                        if (data[YOUNG_COUNT] != 0 && data[YOUNG_TIME] != 0)
                             System.out.println(String.format("Young, Times: %d, GC time: %d ms",
-                                    data[0], data[1]));
+                                    data[YOUNG_COUNT], data[YOUNG_TIME]));
 
-                        if (data[2] != 0 && data[3] != 0)
+                        if (data[OLD_COUNT] != 0 && data[OLD_TIME] != 0)
                             System.out.println(String.format("Old, Times: %d, GC time: %d ms",
-                                    data[2], data[3]));
+                                    data[OLD_COUNT], data[OLD_TIME]));
 
                         for (int i = 0; i < 4; i++) {
                             data[i] = 0;
