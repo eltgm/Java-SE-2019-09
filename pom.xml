@@ -27,6 +27,7 @@
         <module>hw01-maven</module>
         <module>hw03-generics-collections</module>
         <module>hw06-gc</module>
+        <module>hw09-byteCodes</module>
     </modules>
 
     <properties>
@@ -36,6 +37,8 @@
         <com.google.guava.version>27.1-jre</com.google.guava.version>
         <junit.version>4.12</junit.version>
         <my.variable>42</my.variable>
+        <asm.version>7.2</asm.version>
+        <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
     </properties>
 
     <dependencyManagement>
