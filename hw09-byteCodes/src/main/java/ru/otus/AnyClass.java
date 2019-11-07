@@ -6,4 +6,9 @@ public class AnyClass implements AnyClassInterface {
     public void sayHello(String name) {
         System.out.println("Hello, " + name + "!");
     }
+
+    @Override
+    public void sayHello(int id) {
+        System.out.println("Hello, " + id + "!");
+    }
 }
