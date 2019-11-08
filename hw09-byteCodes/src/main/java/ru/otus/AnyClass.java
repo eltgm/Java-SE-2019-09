@@ -3,8 +3,8 @@ package ru.otus;
 public class AnyClass implements AnyClassInterface {
 
     @Override
-    public void sayHello(String name) {
-        System.out.println("Hello, " + name + "!");
+    public void sayHello(String name, String value) {
+        System.out.println("Hello, " + name + "!" + value);
     }
 
     @Override
