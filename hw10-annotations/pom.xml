@@ -27,7 +27,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.otus.</mainClass>
+                            <mainClass>ru.otus.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
