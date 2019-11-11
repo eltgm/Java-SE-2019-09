@@ -11,6 +11,7 @@ public class ClassTest {
     public void beforeEach() {
         calculator = new Calculator();
         System.out.println("New calculator created");
+        throw new Error();
     }
 
     @Test

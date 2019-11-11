@@ -47,14 +47,25 @@ public class TestLauncher {
     }
 
     private static void runTests(TestLauncher testLauncher) {
-        testLauncher.testMethods.forEach(method -> {
+        for (Method method : testLauncher.testMethods) {
             try {
                 final var constructor = testLauncher.className.getConstructor();
                 final var newInstance = constructor.newInstance();
 
-                for (Method beforeEachMethods : testLauncher.beforeEachMethods) {
-                    beforeEachMethods.invoke(newInstance);
+                try {
+                    for (Method beforeEachMethods : testLauncher.beforeEachMethods) {
+                        beforeEachMethods.invoke(newInstance);
+                    }
+                } catch (InvocationTargetException exc) {
+                    System.err.println("Error when @BeforeEach:");
+                    exc.getTargetException().printStackTrace();
+                    for (Method afterEachMethods : testLauncher.afterEachMethods) {
+                        afterEachMethods.invoke(newInstance);
+                    }
+                    testLauncher.failsCounter = testLauncher.testMethods.size();
+                    break;
                 }
+
 
                 try {
                     System.out.println("Test for " + method.getName());
@@ -71,7 +82,7 @@ public class TestLauncher {
                     InstantiationException | InvocationTargetException e) {
                 e.printStackTrace();
             }
-        });
+        }
 
         showResults(testLauncher);
     }
