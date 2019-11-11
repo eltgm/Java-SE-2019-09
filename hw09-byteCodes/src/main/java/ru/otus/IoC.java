@@ -10,12 +10,12 @@ class IoC {
     private static final List<Method> methodList = new ArrayList<>();
     static AnyClassInterface createMyClass() {
         InvocationHandler handler = new DemoInvocationHandler(new AnyClass());
-        getMethods();
+        cacheMethods();
         return (AnyClassInterface) Proxy.newProxyInstance(IoC.class.getClassLoader(),
                 new Class<?>[]{AnyClassInterface.class}, handler);
     }
 
-    private static void getMethods() {
+    private static void cacheMethods() {
         Class<AnyClassInterface> clazz = AnyClassInterface.class;
         for (Method method :
                 clazz.getMethods()) {
