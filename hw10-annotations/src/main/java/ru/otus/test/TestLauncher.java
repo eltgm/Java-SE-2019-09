@@ -7,17 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestLauncher {
-    private final static List<Method> beforeEachMethods = new ArrayList<>();
-    private final static List<Method> testMethods = new ArrayList<>();
-    private final static List<Method> afterEachMethods = new ArrayList<>();
-    private static Class className;
-    private static int failsCounter = 0;
+    private final List<Method> beforeEachMethods = new ArrayList<>();
+    private final List<Method> testMethods = new ArrayList<>();
+    private final List<Method> afterEachMethods = new ArrayList<>();
+    private Class className;
+    private int failsCounter = 0;
 
     private TestLauncher() {
     }
 
     public static void launchTest(Class classForTest) {
-        className = classForTest;
+        TestLauncher testLauncher = new TestLauncher();
+        testLauncher.className = classForTest;
         System.out.println("Test launched from - " + classForTest.getSimpleName());
 
         final var declaredMethods = classForTest.getDeclaredMethods();
@@ -27,31 +28,31 @@ public class TestLauncher {
                     method.getDeclaredAnnotations()) {
                 switch (annotation.annotationType().getSimpleName()) {
                     case "BeforeEach":
-                        beforeEachMethods.add(method);
+                        testLauncher.beforeEachMethods.add(method);
                         break;
                     case "Test":
-                        testMethods.add(method);
+                        testLauncher.testMethods.add(method);
                         break;
                     case "AfterEach":
-                        afterEachMethods.add(method);
+                        testLauncher.afterEachMethods.add(method);
                         break;
                 }
             }
         }
 
-        if (!testMethods.isEmpty())
-            runTests();
+        if (!testLauncher.testMethods.isEmpty())
+            runTests(testLauncher);
         else
             System.out.println("Class doesn't contains @Test methods!");
     }
 
-    private static void runTests() {
-        testMethods.forEach(method -> {
+    private static void runTests(TestLauncher testLauncher) {
+        testLauncher.testMethods.forEach(method -> {
             try {
-                final var constructor = className.getConstructor();
+                final var constructor = testLauncher.className.getConstructor();
                 final var newInstance = constructor.newInstance();
 
-                for (Method beforeEachMethods : beforeEachMethods) {
+                for (Method beforeEachMethods : testLauncher.beforeEachMethods) {
                     beforeEachMethods.invoke(newInstance);
                 }
 
@@ -60,10 +61,10 @@ public class TestLauncher {
                     method.invoke(newInstance);
                 } catch (InvocationTargetException error) {
                     error.getTargetException().printStackTrace();
-                    failsCounter++;
+                    testLauncher.failsCounter++;
                 }
 
-                for (Method afterEachMethods : afterEachMethods) {
+                for (Method afterEachMethods : testLauncher.afterEachMethods) {
                     afterEachMethods.invoke(newInstance);
                 }
             } catch (NoSuchMethodException | IllegalAccessException |
@@ -72,15 +73,16 @@ public class TestLauncher {
             }
         });
 
-        showResults();
+        showResults(testLauncher);
     }
 
-    private static void showResults() {
+    private static void showResults(TestLauncher testLauncher) {
         System.out.println();
 
         System.out.println("*************Test results**************");
         System.out.println(String.format("*Tests failed: %d, passed: %d of %d tests*"
-                , failsCounter, testMethods.size() - failsCounter, testMethods.size()));
+                , testLauncher.failsCounter, testLauncher.testMethods.size() - testLauncher.failsCounter
+                , testLauncher.testMethods.size()));
         System.out.println("***************************************");
     }
 }
