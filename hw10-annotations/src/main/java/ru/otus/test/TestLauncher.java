@@ -52,21 +52,8 @@ public class TestLauncher {
                 final var constructor = testLauncher.className.getConstructor();
                 final var newInstance = constructor.newInstance();
 
-                try {
-                    for (Method beforeEachMethods : testLauncher.beforeEachMethods) {
-                        beforeEachMethods.invoke(newInstance);
-                    }
-                } catch (InvocationTargetException exc) {
-                    System.err.println("Error when @BeforeEach:");
-                    exc.getTargetException().printStackTrace();
-                    for (Method afterEachMethods : testLauncher.afterEachMethods) {
-                        afterEachMethods.invoke(newInstance);
-                    }
-                    testLauncher.failsCounter = testLauncher.testMethods.size();
+                if (!runBeforeEach(newInstance, testLauncher))
                     break;
-                }
-
-
                 try {
                     System.out.println("Test for " + method.getName());
                     method.invoke(newInstance);
@@ -85,6 +72,33 @@ public class TestLauncher {
         }
 
         showResults(testLauncher);
+    }
+
+    private static boolean runBeforeEach(Object newInstance, TestLauncher testLauncher) {
+        try {
+            for (Method beforeEachMethods : testLauncher.beforeEachMethods) {
+                beforeEachMethods.invoke(newInstance);
+            }
+        } catch (InvocationTargetException exc) {
+            System.err.println("Error when @BeforeEach:");
+            exc.getTargetException().printStackTrace();
+            testLauncher.failsCounter = testLauncher.testMethods.size();
+
+            for (Method afterEachMethods : testLauncher.afterEachMethods) {
+                try {
+                    afterEachMethods.invoke(newInstance);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    System.err.println("Error when @AfterEach:");
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        } catch (IllegalAccessException e) {
+            System.err.println("Error when @BeforeEach:");
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
     private static void showResults(TestLauncher testLauncher) {
