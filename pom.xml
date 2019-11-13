@@ -28,6 +28,7 @@
         <module>hw03-generics-collections</module>
         <module>hw06-gc</module>
         <module>hw09-byteCodes</module>
+        <module>hw10-annotations</module>
     </modules>
 
     <properties>
