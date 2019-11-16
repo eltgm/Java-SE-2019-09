@@ -8,7 +8,6 @@ public enum Bills {
     TEN(10);
 
     private int value;
-    private int count;
 
     Bills(int value) {
         this.value = value;
@@ -16,19 +15,5 @@ public enum Bills {
 
     public int getValue() {
         return value;
-    }
-
-    public void addBill() {
-        count++;
-    }
-
-    public void removeBill() {
-        if (count > 0)
-            count--;
-        else throw new NotEnoughBillException("Нет купюр");
-    }
-
-    public int getBills() {
-        return count;
     }
 }

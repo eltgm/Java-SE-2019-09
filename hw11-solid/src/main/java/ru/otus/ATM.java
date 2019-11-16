@@ -1,11 +1,11 @@
 package ru.otus;
 
-import java.util.Map;
+import java.util.List;
 
 interface ATM {
-    void insertMoney(Integer... bills);
+    List<BillCell> insertMoney(Integer... bills);
 
-    Map<Integer, Integer> getMoney(Integer amount);
+    List<BillCell> getMoney(Integer amount);
 
     Integer getTotal();
 }
