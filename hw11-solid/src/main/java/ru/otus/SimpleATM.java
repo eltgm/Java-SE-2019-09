@@ -32,9 +32,7 @@ public class SimpleATM implements ATM {
             }
         }
 
-        for (var billCell : billCells) {
-            System.out.println(billCell);
-        }
+        billCells.parallelStream().forEachOrdered(System.out::println);
 
         var returnCount = 0;
         for (var isAddedBill : isAddedBills) {
@@ -95,7 +93,21 @@ public class SimpleATM implements ATM {
             }
         }
 
-        return outMoneys;
+        if (outSum == amount)
+            return outMoneys;
+        else {
+            outMoneys.parallelStream()
+                    .forEach(billCell -> billCells.parallelStream()
+                            .forEach(billCell1 -> {
+                                if (billCell1.getValue() == billCell.getValue()) {
+                                    while (billCell.getBills() > 0) {
+                                        billCell1.addBill();
+                                        billCell.removeBill();
+                                    }
+                                }
+                            }));
+            throw new NotEnoughMoneyException("Недостаточно денег для выдачи запрашиваемой суммы!");
+        }
     }
 
     @Override

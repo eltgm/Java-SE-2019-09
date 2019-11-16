@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ATMTest {
     private static ATM atm;
@@ -65,5 +64,12 @@ class ATMTest {
         final var money = atm.getMoney(50);
 
         assertArrayEquals(neededMoney.toArray(), money.toArray());
+    }
+
+    @Test
+    void getExceptionAfterGetMoney() {
+        atm.insertMoney(10, 10, 10, 5, 15, 50, 100);
+
+        assertThrows(NotEnoughMoneyException.class, () -> atm.getMoney(35));
     }
 }

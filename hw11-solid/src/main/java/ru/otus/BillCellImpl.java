@@ -4,7 +4,7 @@ package ru.otus;
 import java.util.Objects;
 
 public class BillCellImpl implements BillCell {
-    private int value;
+    private final int value;
     private int count = 0;
 
     public BillCellImpl(int value) {
