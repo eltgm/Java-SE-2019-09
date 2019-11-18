@@ -106,7 +106,7 @@ public class SimpleATM implements ATM {
                                     }
                                 }
                             }));
-            throw new NotEnoughMoneyException("Недостаточно денег для выдачи запрашиваемой суммы!");
+            throw new NotEnoughMoneyException("Недостаточно купюр для выдачи запрашиваемой суммы!");
         }
     }
 
