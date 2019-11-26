@@ -2,7 +2,7 @@ package ru.otus.atm;
 
 import java.util.List;
 
-public interface ATM {
+public interface ATM extends Cloneable {
     List<BillCell> insertMoney(long... bills);
 
     List<BillCell> getMoney(long amount);
