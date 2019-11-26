@@ -1,10 +1,12 @@
 package ru.otus.atm;
 
+import ru.otus.department.ATMListener;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SimpleATM implements ATM {
+public class SimpleATM implements ATM, ATMListener {
     private final List<BillCell> billCells = new ArrayList<>();
     private SimpleATMOriginator simpleATMOriginator = new SimpleATMOriginator();
 
@@ -169,5 +171,20 @@ public class SimpleATM implements ATM {
         return "SimpleATM{" +
                 "billCells=" + billCells +
                 '}';
+    }
+
+    @Override
+    public long onGetTotal() {
+        return getTotal();
+    }
+
+    @Override
+    public void onRestoreState() {
+        restoreState();
+    }
+
+    @Override
+    public void onSaveState() {
+        saveState();
     }
 }
