@@ -5,7 +5,9 @@ public interface BillCell {
 
     void removeBill();
 
-    int getBills();
+    long getBills();
 
-    int getValue();
+    long getValue();
+
+    BillCell clone();
 }

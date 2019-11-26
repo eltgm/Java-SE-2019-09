@@ -1,15 +1,15 @@
 package ru.otus.department;
 
-import ru.otus.atm.SimpleATM;
+import ru.otus.atm.ATM;
 
 public class SimpleMemento {
-    private final SimpleATM atm;
+    private final ATM atm;
 
-    public SimpleMemento(SimpleATM atm) {
-        this.atm = new SimpleATM(atm);
+    public SimpleMemento(ATM atm) {
+        this.atm = atm;
     }
 
-    public SimpleATM getAtm() {
+    public ATM getAtm() {
         return atm;
     }
 }

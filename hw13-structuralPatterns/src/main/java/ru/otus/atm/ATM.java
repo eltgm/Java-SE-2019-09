@@ -3,13 +3,15 @@ package ru.otus.atm;
 import java.util.List;
 
 public interface ATM {
-    List<BillCell> insertMoney(Integer... bills);
+    List<BillCell> insertMoney(long... bills);
 
-    List<BillCell> getMoney(Integer amount);
+    List<BillCell> getMoney(long amount);
 
-    Integer getTotal();
+    long getTotal();
 
     void restoreState();
 
     void saveState();
+
+    ATM clone();
 }

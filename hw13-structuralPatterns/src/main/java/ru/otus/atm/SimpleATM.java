@@ -6,18 +6,18 @@ import java.util.List;
 
 public class SimpleATM implements ATM {
     private final List<BillCell> billCells = new ArrayList<>();
-    private final SimpleATMOriginator simpleATMOriginator = new SimpleATMOriginator();
+    private SimpleATMOriginator simpleATMOriginator = new SimpleATMOriginator();
 
     public SimpleATM() {
         Arrays.stream(Bills.values())
                 .forEach(bills -> billCells.add(new BillCellImpl(bills.getValue())));
     }
 
-    public SimpleATM(Integer... bills) {
+    public SimpleATM(long... bills) {
         Arrays.stream(Bills.values())
                 .forEach(billsCell -> billCells.add(new BillCellImpl(billsCell.getValue())));
 
-        Arrays.stream(bills).parallel()
+        Arrays.stream(bills)
                 .forEach(integer -> billCells
                         .stream()
                         .filter(billCell -> billCell.getValue() == integer)
@@ -25,53 +25,34 @@ public class SimpleATM implements ATM {
     }
 
     public SimpleATM(SimpleATM simpleATM) {
-        simpleATM.billCells.parallelStream().forEach(billCell -> billCells.add(((BillCellImpl) billCell).clone()));
+        simpleATM.billCells
+                .forEach(billCell -> this.billCells.add(((BillCellImpl) billCell).clone()));
     }
 
     @Override
-    public List<BillCell> insertMoney(Integer... bills) {
-        var returnedBills = new ArrayList<BillCell>();
-
+    public List<BillCell> insertMoney(long... bills) {
         Arrays.stream(bills)
                 .forEach(integer -> billCells
                         .stream()
                         .filter(billCell -> billCell.getValue() == integer)
                         .forEach(BillCell::addBill));
 
-        var isAddedBills = new boolean[bills.length];
+        billCells.stream().forEachOrdered(System.out::println);
 
-        for (var i = 0; i < bills.length; i++) {
-            for (var billCell : billCells) {
-                isAddedBills[i] = billCell.getValue() == bills[i];
-                if (isAddedBills[i])
-                    break;
-            }
-        }
+        return getReturnedBills(bills);
+    }
 
-        billCells.parallelStream().forEachOrdered(System.out::println);
+    private List<BillCell> getReturnedBills(long[] bills) {
+        var returnedBills = new ArrayList<BillCell>();
 
-        var returnCount = 0;
-        for (var isAddedBill : isAddedBills) {
-            if (!isAddedBill) {
-                returnCount++;
-            }
-        }
-        var returnedBillsInt = new int[returnCount];
-        var outCounts = 0;
-        for (var i = 0; i < isAddedBills.length; i++) {
-            var isAddedBill = isAddedBills[i];
-            if (!isAddedBill) {
-                returnedBillsInt[outCounts] = bills[i];
-                outCounts++;
-            }
-        }
+        var returnedBillsLong = getReturnedBillsArray(bills);
 
-        for (var i = 0; i < returnedBillsInt.length; i++) {
-            var returnedBill = new BillCellImpl(returnedBillsInt[i]);
+        for (var i = 0; i < returnedBillsLong.length; i++) {
+            var returnedBill = new BillCellImpl(returnedBillsLong[i]);
             returnedBill.addBill();
 
-            for (var j = 0; j < returnedBillsInt.length; j++) {
-                if (returnedBillsInt[i] == returnedBillsInt[j] && i != j) {
+            for (var j = 0; j < returnedBillsLong.length; j++) {
+                if (returnedBillsLong[i] == returnedBillsLong[j] && i != j) {
                     returnedBill.addBill();
                 }
             }
@@ -90,8 +71,38 @@ public class SimpleATM implements ATM {
         return returnedBills;
     }
 
+    private long[] getReturnedBillsArray(long[] bills) {
+        var isAddedBills = new boolean[bills.length];
+
+        for (var i = 0; i < bills.length; i++) {
+            for (var billCell : billCells) {
+                isAddedBills[i] = billCell.getValue() == bills[i];
+                if (isAddedBills[i])
+                    break;
+            }
+        }
+
+        var returnCount = 0;
+        for (var isAddedBill : isAddedBills) {
+            if (!isAddedBill) {
+                returnCount++;
+            }
+        }
+        var returnedBillsLong = new long[returnCount];
+        var outCounts = 0;
+        for (var i = 0; i < isAddedBills.length; i++) {
+            var isAddedBill = isAddedBills[i];
+            if (!isAddedBill) {
+                returnedBillsLong[outCounts] = bills[i];
+                outCounts++;
+            }
+        }
+
+        return returnedBillsLong;
+    }
+
     @Override
-    public List<BillCell> getMoney(Integer amount) {
+    public List<BillCell> getMoney(long amount) {
         var outMoneys = new ArrayList<BillCell>();
         var outSum = 0;
 
@@ -112,8 +123,8 @@ public class SimpleATM implements ATM {
         if (outSum == amount)
             return outMoneys;
         else {
-            outMoneys.parallelStream()
-                    .forEach(billCell -> billCells.parallelStream()
+            outMoneys
+                    .forEach(billCell -> billCells
                             .forEach(billCell1 -> {
                                 if (billCell1.getValue() == billCell.getValue()) {
                                     while (billCell.getBills() > 0) {
@@ -127,22 +138,30 @@ public class SimpleATM implements ATM {
     }
 
     @Override
-    public Integer getTotal() {
-        return billCells.parallelStream()
+    public long getTotal() {
+        return billCells.stream()
                 .map(cell -> cell.getValue() * cell.getBills())
-                .reduce(0, Integer::sum);
+                .reduce(0L, Long::sum);
     }
 
     @Override
     public void restoreState() {
-        final var prevATMState = simpleATMOriginator.restoreAtm();
+        final var prevATMState = (SimpleATM) simpleATMOriginator.restoreAtm();
         this.billCells.clear();
-        prevATMState.billCells.parallelStream().forEach(billCell -> this.billCells.add(((BillCellImpl) billCell).clone()));
+        prevATMState.billCells.forEach(billCell -> this.billCells.add(((BillCellImpl) billCell).clone()));
     }
 
     @Override
     public void saveState() {
-        simpleATMOriginator.saveAtm(this);
+        simpleATMOriginator.saveAtm(this.clone());
+    }
+
+    @Override
+    public ATM clone() {
+        SimpleATM atm = new SimpleATM();
+        this.billCells
+                .forEach(billCell -> atm.billCells.add(((BillCellImpl) billCell).clone()));
+        return atm;
     }
 
     @Override

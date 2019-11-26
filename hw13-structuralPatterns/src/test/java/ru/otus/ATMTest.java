@@ -33,7 +33,7 @@ class ATMTest {
     void getTotal() {
         atm.insertMoney(10, 10, 10, 5, 15, 50, 100);
 
-        int atmSum = atm.getTotal();
+        long atmSum = atm.getTotal();
 
         assertEquals(180, atmSum);
     }

@@ -4,10 +4,10 @@ package ru.otus.atm;
 import java.util.Objects;
 
 public class BillCellImpl implements BillCell {
-    private final int value;
-    private int count = 0;
+    private final long value;
+    private long count = 0;
 
-    public BillCellImpl(int value) {
+    public BillCellImpl(long value) {
         this.value = value;
     }
 
@@ -21,12 +21,12 @@ public class BillCellImpl implements BillCell {
         else throw new NotEnoughBillException("Нет купюр");
     }
 
-    public int getBills() {
+    public long getBills() {
         return count;
     }
 
     @Override
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
@@ -53,7 +53,7 @@ public class BillCellImpl implements BillCell {
     }
 
     @Override
-    protected BillCellImpl clone() {
+    public BillCellImpl clone() {
         BillCellImpl billCell = new BillCellImpl(this.getValue());
         billCell.count = this.getBills();
         return billCell;

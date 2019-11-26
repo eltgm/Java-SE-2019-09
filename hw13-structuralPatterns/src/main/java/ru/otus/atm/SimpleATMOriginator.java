@@ -3,18 +3,30 @@ package ru.otus.atm;
 import ru.otus.department.SimpleMemento;
 
 import java.util.ArrayDeque;
-import java.util.Deque;
 
 
 class SimpleATMOriginator {
 
-    private final Deque<SimpleMemento> stack = new ArrayDeque<>();
+    private final ArrayDeque<SimpleMemento> stack;
 
-    void saveAtm(SimpleATM state) {
+    public SimpleATMOriginator() {
+        stack = new ArrayDeque<>();
+    }
+
+    public SimpleATMOriginator(ArrayDeque<SimpleMemento> stack) {
+        this.stack = stack;
+    }
+
+    void saveAtm(ATM state) {
         stack.push(new SimpleMemento(state));
     }
 
-    SimpleATM restoreAtm() {
+    ATM restoreAtm() {
         return stack.pop().getAtm();
+    }
+
+    @Override
+    protected SimpleATMOriginator clone() {
+        return new SimpleATMOriginator(this.stack.clone());
     }
 }
