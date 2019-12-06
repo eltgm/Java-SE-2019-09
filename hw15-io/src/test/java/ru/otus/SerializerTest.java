@@ -55,7 +55,7 @@ class SerializerTest {
     @Test
     void customWriterTest() {
         Gson gson = new GsonBuilder().serializeNulls().create();
-        assertEquals(gson.toJson(new int[]{1, 2, 3}), jsonWriter.toJson(new int[]{1, 2, 3}));
+
         assertEquals(gson.toJson((byte) 1), jsonWriter.toJson((byte) 1));
         assertEquals(gson.toJson((short) 1f), jsonWriter.toJson((short) 1f));
         assertEquals(gson.toJson(1), jsonWriter.toJson(1));
@@ -64,7 +64,7 @@ class SerializerTest {
         assertEquals(gson.toJson(1d), jsonWriter.toJson(1d));
         assertEquals(gson.toJson("aaa"), jsonWriter.toJson("aaa"));
         assertEquals(gson.toJson('a'), jsonWriter.toJson('a'));
-
+        assertEquals(gson.toJson(new int[]{1, 2, 3}), jsonWriter.toJson(new int[]{1, 2, 3}));
         assertEquals(gson.toJson(List.of(1, 2, 3)), jsonWriter.toJson(List.of(1, 2, 3)));
         assertEquals(gson.toJson(Collections.singletonList(1)), jsonWriter.toJson(Collections.singletonList(1)));
     }

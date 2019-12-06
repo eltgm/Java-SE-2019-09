@@ -3,6 +3,7 @@ package ru.otus;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -15,6 +16,22 @@ class MyJsonWriter {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         if (object == null)
             return null;
+        try {
+            if (isPrimitive(object.getClass().getSimpleName())) {
+                return inspectPrimitive(object).toString();
+            } else if (object instanceof String) {
+                return inspectString(object).toString();
+            } else if (object instanceof Collection) {
+                return inspectCollection(object).build().toString();
+            } else if (isArray(object) > 0) {
+
+                return inspectArray(object, isArray(object)).build().toString();
+
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
 
         Class<?> classToWrite = object.getClass();
         final var declaredFields = classToWrite.getDeclaredFields();
@@ -45,17 +62,17 @@ class MyJsonWriter {
                 }
 
                 if (isPrimitive(o.getClass().getSimpleName())) {
-                    objectBuilder.addAll(inspectPrimitive(o, declaredField.getName()));
+                    objectBuilder.add(declaredField.getName(), inspectPrimitive(o));
                 } else if (o instanceof String) {
-                    objectBuilder.addAll(inspectString(o, declaredField.getName()));
+                    objectBuilder.add(declaredField.getName(), inspectString(o));
                 } else if (arrayLength == -1 && !(o instanceof Collection)) {
                     objectBuilder.add(declaredField.getName(), inspectObject(o));
                 }
             }
         } else if (object instanceof String) {
-            objectBuilder.addAll(inspectString(object, ""));
+            objectBuilder.add("", inspectString(object));
         } else {
-            objectBuilder.addAll(inspectPrimitive(object, ""));
+            objectBuilder.add("", inspectPrimitive(object));
         }
     }
 
@@ -69,43 +86,48 @@ class MyJsonWriter {
         return objectBuilder;
     }
 
-    private JsonObjectBuilder inspectString(Object obj, String fieldName) {
-        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
-        jsonObjectBuilder.add(fieldName, (String) obj);
+    private JsonValue inspectString(Object obj) {
+        JsonValue jsonValue = Json.createValue((String) obj);
 
-        return jsonObjectBuilder;
+        return jsonValue;
     }
 
-    private JsonObjectBuilder inspectPrimitive(Object obj, String fieldName) {
-        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+    private JsonValue inspectPrimitive(Object obj) {
+        JsonValue jsonValue;
         switch (obj.getClass().getSimpleName()) {
             case "Boolean":
-                jsonObjectBuilder.add(fieldName, (Boolean) obj);
+                if ((Boolean) obj) {
+                    jsonValue = Json.createValue("true");
+                } else {
+                    jsonValue = Json.createValue("false");
+                }
                 break;
             case "Character":
-                jsonObjectBuilder.add(fieldName, (Character) obj);
+                jsonValue = Json.createValue(Character.toString((Character) obj));
                 break;
             case "Byte":
-                jsonObjectBuilder.add(fieldName, (Byte) obj);
+                jsonValue = Json.createValue((Byte) obj);
                 break;
             case "Short":
-                jsonObjectBuilder.add(fieldName, (Short) obj);
+                jsonValue = Json.createValue((Short) obj);
                 break;
             case "Integer":
-                jsonObjectBuilder.add(fieldName, (Integer) obj);
+                jsonValue = Json.createValue((Integer) obj);
                 break;
             case "Long":
-                jsonObjectBuilder.add(fieldName, (Long) obj);
+                jsonValue = Json.createValue((Long) obj);
                 break;
             case "Float":
-                jsonObjectBuilder.add(fieldName, (Float) obj);
+                jsonValue = Json.createValue((Float) obj);
                 break;
             case "Double":
-                jsonObjectBuilder.add(fieldName, (Double) obj);
+                jsonValue = Json.createValue((Double) obj);
                 break;
+            default:
+                jsonValue = null;
         }
 
-        return jsonObjectBuilder;
+        return jsonValue;
     }
 
     private JsonArrayBuilder inspectArray(Object o, int length) throws IllegalAccessException {
@@ -116,7 +138,7 @@ class MyJsonWriter {
             if (isPrimitiveArray(typeName)) {
                 for (int i = 0; i < length; i++) {
                     final var arrayElem = Array.get(o, i);
-                    primitiveAdd(arrayBuilder, typeName, arrayElem);
+                    arrayBuilder.add(inspectPrimitive(arrayElem));
                 }
             } else if (isStringArray(o)) {
                 for (int i = 0; i < length; i++) {
@@ -173,7 +195,7 @@ class MyJsonWriter {
             if (simpleName.equals("String")) {
                 arrayBuilder.add((String) item);
             } else if (isPrimitive(simpleName)) {
-                primitiveAdd(arrayBuilder, simpleName, item);
+                arrayBuilder.add(inspectPrimitive(item));
             } else {
                 JsonObjectBuilder arrayElemBuilder = Json.createObjectBuilder();
                 navigateObject(item.getClass().getDeclaredFields(), item, arrayElemBuilder);
