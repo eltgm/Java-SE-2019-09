@@ -46,7 +46,7 @@ class SerializerTest {
     void writerTest() {
         Gson gson = new Gson();
 
-        final var objJson = jsonWriter.toJson(testObj);
+        final var objJson = jsonWriter.toJsonString(testObj);
         final var gsonDeserializeObj = gson.fromJson(objJson, TestObj.class);
 
         assertEquals(testObj, gsonDeserializeObj);
@@ -56,16 +56,16 @@ class SerializerTest {
     void customWriterTest() {
         Gson gson = new GsonBuilder().serializeNulls().create();
 
-        assertEquals(gson.toJson((byte) 1), jsonWriter.toJson((byte) 1));
-        assertEquals(gson.toJson((short) 1f), jsonWriter.toJson((short) 1f));
-        assertEquals(gson.toJson(1), jsonWriter.toJson(1));
-        assertEquals(gson.toJson(1L), jsonWriter.toJson(1L));
-        assertEquals(gson.toJson(1f), jsonWriter.toJson(1f));
-        assertEquals(gson.toJson(1d), jsonWriter.toJson(1d));
-        assertEquals(gson.toJson("aaa"), jsonWriter.toJson("aaa"));
-        assertEquals(gson.toJson('a'), jsonWriter.toJson('a'));
-        assertEquals(gson.toJson(new int[]{1, 2, 3}), jsonWriter.toJson(new int[]{1, 2, 3}));
-        assertEquals(gson.toJson(List.of(1, 2, 3)), jsonWriter.toJson(List.of(1, 2, 3)));
-        assertEquals(gson.toJson(Collections.singletonList(1)), jsonWriter.toJson(Collections.singletonList(1)));
+        assertEquals(gson.toJson((byte) 1), jsonWriter.toJsonString((byte) 1));
+        assertEquals(gson.toJson((short) 1f), jsonWriter.toJsonString((short) 1f));
+        assertEquals(gson.toJson(1), jsonWriter.toJsonString(1));
+        assertEquals(gson.toJson(1L), jsonWriter.toJsonString(1L));
+        assertEquals(gson.toJson(1f), jsonWriter.toJsonString(1f));
+        assertEquals(gson.toJson(1d), jsonWriter.toJsonString(1d));
+        assertEquals(gson.toJson("aaa"), jsonWriter.toJsonString("aaa"));
+        assertEquals(gson.toJson('a'), jsonWriter.toJsonString('a'));
+        assertEquals(gson.toJson(new int[]{1, 2, 3}), jsonWriter.toJsonString(new int[]{1, 2, 3}));
+        assertEquals(gson.toJson(List.of(1, 2, 3)), jsonWriter.toJsonString(List.of(1, 2, 3)));
+        assertEquals(gson.toJson(Collections.singletonList(1)), jsonWriter.toJsonString(Collections.singletonList(1)));
     }
 }

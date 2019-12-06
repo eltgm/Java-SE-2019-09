@@ -3,41 +3,13 @@ package ru.otus;
 import java.lang.reflect.Array;
 
 public final class TypeChecker {
-    public static boolean isStringArray(Object o) {
-        if (o != null) {
-            return o.getClass().getTypeName().equals("String[]");
-        }
-        return false;
+    private TypeChecker() {
     }
 
-    public static boolean isPrimitiveArray(String type) {
-        switch (type) {
-            case "boolean[]":
-            case "char[]":
-            case "byte[]":
-            case "short[]":
-            case "int[]":
-            case "long[]":
-            case "float[]":
-            case "double[]":
-                return true;
-        }
-        return false;
-    }
-
-    public static boolean isPrimitive(String type) {
-        switch (type) {
-            case "Boolean":
-            case "Character":
-            case "Byte":
-            case "Short":
-            case "Integer":
-            case "Long":
-            case "Float":
-            case "Double":
-                return true;
-        }
-        return false;
+    public static boolean isPrimitiveOrString(Object obj) {
+        return obj instanceof Boolean || obj instanceof Character || obj instanceof String
+                || obj instanceof Byte || obj instanceof Short || obj instanceof Integer
+                || obj instanceof Long || obj instanceof Float || obj instanceof Double;
     }
 
     public static int isArray(Object o) {
