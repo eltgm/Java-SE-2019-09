@@ -59,6 +59,8 @@ class MyJsonWriter {
                 } else {
                     objectBuilder.add(declaredField.getName(), inspectObject(o));
                 }
+            } else if (o == null && !(Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers))) {
+                objectBuilder.addNull(declaredField.getName());
             }
         }
     }
