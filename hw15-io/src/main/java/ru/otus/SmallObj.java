@@ -5,6 +5,8 @@ import java.util.Objects;
 public class SmallObj {
     private String str;
     private int num;
+    private static final String CONST = "Vasya";
+    private String nullStr = null;
 
     public SmallObj(String str, int num) {
         this.str = str;

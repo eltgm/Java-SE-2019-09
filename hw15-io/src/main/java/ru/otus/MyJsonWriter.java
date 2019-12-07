@@ -6,6 +6,7 @@ import javax.json.JsonObjectBuilder;
 import javax.json.JsonValue;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 
 import static ru.otus.TypeChecker.isArray;
@@ -44,21 +45,20 @@ class MyJsonWriter {
     private void navigateObject(Field[] declaredFields, Object object, JsonObjectBuilder objectBuilder) throws IllegalAccessException {
         for (Field declaredField : declaredFields) {
             declaredField.setAccessible(true);
+            final var modifiers = declaredField.getModifiers();
             final var o = declaredField.get(object);
+            if (o != null && !(Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers))) {
 
-            int arrayLength = isArray(o);
-            if (arrayLength > 0) {
-                objectBuilder.add(declaredField.getName(), inspectArray(o, arrayLength));
-            }
-
-            if (o instanceof Collection) {
-                objectBuilder.add(declaredField.getName(), inspectCollection(o));
-            }
-
-            if (isPrimitiveOrString(o)) {
-                objectBuilder.add(declaredField.getName(), inspectPrimitiveOrString(o));
-            } else if (arrayLength == -1 && !(o instanceof Collection)) {
-                objectBuilder.add(declaredField.getName(), inspectObject(o));
+                int arrayLength = isArray(o);
+                if (arrayLength > 0) {
+                    objectBuilder.add(declaredField.getName(), inspectArray(o, arrayLength));
+                } else if (o instanceof Collection) {
+                    objectBuilder.add(declaredField.getName(), inspectCollection(o));
+                } else if (isPrimitiveOrString(o)) {
+                    objectBuilder.add(declaredField.getName(), inspectPrimitiveOrString(o));
+                } else {
+                    objectBuilder.add(declaredField.getName(), inspectObject(o));
+                }
             }
         }
     }
@@ -76,11 +76,7 @@ class MyJsonWriter {
     private JsonValue inspectPrimitiveOrString(Object obj) {
         JsonValue jsonValue = null;
         if (obj instanceof Boolean) {
-            if ((Boolean) obj) {
-                jsonValue = Json.createValue("true");
-            } else {
-                jsonValue = Json.createValue("false");
-            }
+            jsonValue = ((Boolean) obj) ? JsonValue.TRUE : JsonValue.FALSE;
         }
         if (obj instanceof Character) {
             jsonValue = Json.createValue(Character.toString((Character) obj));
