@@ -33,6 +33,7 @@
         <module>hw13-structuralPatterns</module>
         <module>hw15-io</module>
         <module>hw17-jdbc</module>
+        <module>hw19-hibernate</module>
     </modules>
 
     <properties>
@@ -50,8 +51,11 @@
         <javax.json-api.version>1.1.4</javax.json-api.version>
         <javax.json.version>1.1.4</javax.json.version>
         <h2.version>1.4.197</h2.version>
-
+        <hibernate-core.version>5.4.4.Final</hibernate-core.version>
+        <apache.commons.collections>4.1</apache.commons.collections>
         <com.projectlombok.version>1.18.10</com.projectlombok.version>
+        <javax.persistence>2.2</javax.persistence>
+
         <lombok.verbose>true</lombok.verbose>
         <lombok.addOutputDirectory>false</lombok.addOutputDirectory>
         <lombok.sourceDirectory>${project.basedir}/src/main/java</lombok.sourceDirectory>
@@ -115,11 +119,30 @@
                 <artifactId>javax.json</artifactId>
                 <version>${javax.json.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.h2database</groupId>
                 <artifactId>h2</artifactId>
                 <version>${h2.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${hibernate-core.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${apache.commons.collections}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>javax.persistence-api</artifactId>
+                <version>${javax.persistence}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
