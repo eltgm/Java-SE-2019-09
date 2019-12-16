@@ -47,7 +47,7 @@ public class DBTemplateHibernate<T> implements DBTemplate<T> {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
             Session hibernateSession = currentSession.getHibernateSession();
-            hibernateSession.update(object);
+            hibernateSession.merge(object);
         } catch (Exception e) {
 
             throw new UserDaoException(e);
