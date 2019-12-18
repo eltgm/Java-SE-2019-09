@@ -1,8 +1,10 @@
 package ru.otus.api.model;
 
 
-import lombok.*;
-import lombok.experimental.FieldDefaults;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +15,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @Setter
 
 @Entity
@@ -21,20 +22,20 @@ import java.util.Objects;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    long id;
+    private long id;
 
     @Column(name = "name")
-    String name;
+    private String name;
 
     @OneToOne(cascade = CascadeType.ALL, targetEntity = AddressDataSet.class)
     @JoinColumn(name = "addresses_id")
-    AddressDataSet address;
+    private AddressDataSet address;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     @Builder.Default
-    List<PhoneDataSet> phones = new ArrayList<>();
+    private List<PhoneDataSet> phones = new ArrayList<>();
 
     public void addPhone(PhoneDataSet phone) {
         phones.add(phone);

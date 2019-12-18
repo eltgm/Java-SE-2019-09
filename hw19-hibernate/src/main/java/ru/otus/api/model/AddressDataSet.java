@@ -1,10 +1,8 @@
 package ru.otus.api.model;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -13,18 +11,17 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE)
 
 @Entity
 @Table(name = "addresses")
 public class AddressDataSet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    long id;
+    private long id;
 
     @Column(name = "street")
-    String street;
+    private String street;
 
     @Override
     public boolean equals(Object o) {

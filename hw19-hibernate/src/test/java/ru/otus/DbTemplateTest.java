@@ -22,16 +22,16 @@ public class DbTemplateTest {
     @BeforeAll
     public static void beforeAll() {
         user = User.builder()
-                .id(1)
+
                 .name("Vlad")
                 .address(AddressDataSet.builder()
-                        .id(1)
+
                         .street("Sportivnaya")
                         .build())
                 .build();
 
         user.addPhone(PhoneDataSet.builder()
-                .id(1)
+
                 .number("+79777777777")
                 .user(user)
                 .build());
@@ -41,6 +41,8 @@ public class DbTemplateTest {
         SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
         DBTemplate<User> dbTemplate = new DBTemplateHibernate<>(sessionManager);
         dbServiceUser = new DbServiceImpl<>(dbTemplate);
+
+        dbServiceUser.saveObject(user);
     }
 
     @Test
@@ -58,14 +60,14 @@ public class DbTemplateTest {
     public void createTest() {
         dbServiceUser.saveObject(user);
 
-        final var userOptional = dbServiceUser.getObject(2, User.class);
+        final var userOptional = dbServiceUser.getObject(4, User.class);
         final var loadedUser = userOptional.orElse(null);
         assertTrue(user.equals(loadedUser));
     }
 
     @Test
     public void loadTest() {
-        final var userOptional = dbServiceUser.getObject(2, User.class);
+        final var userOptional = dbServiceUser.getObject(4, User.class);
         final var loadedUser = userOptional.orElse(null);
 
         assertTrue(user.equals(loadedUser));

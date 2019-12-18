@@ -17,14 +17,20 @@ public class DBTemplateHibernate<T> implements DBTemplate<T> {
         this.sessionManager = sessionManager;
     }
 
-
     @Override
     public Optional<T> findById(long id, Class<T> clazz) {
-        DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
-        try {
-            return Optional.ofNullable(currentSession.getHibernateSession().find(clazz, id));
-        } catch (Exception e) {
+        sessionManager.beginSession();
 
+        DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+
+        try {
+            final var object = currentSession.getHibernateSession().find(clazz, id);
+            sessionManager.commitSession();
+            return Optional.ofNullable(object);
+        } catch (Exception e) {
+            sessionManager.rollbackSession();
+        } finally {
+            sessionManager.close();
         }
         return Optional.empty();
     }
@@ -32,25 +38,36 @@ public class DBTemplateHibernate<T> implements DBTemplate<T> {
 
     @Override
     public void saveObject(T object) {
+        sessionManager.beginSession();
+
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
             Session hibernateSession = currentSession.getHibernateSession();
             hibernateSession.save(object);
+            sessionManager.commitSession();
         } catch (Exception e) {
-
+            sessionManager.rollbackSession();
             throw new UserDaoException(e);
+        } finally {
+            sessionManager.close();
         }
     }
 
     @Override
     public void updateObject(T object) {
+        sessionManager.beginSession();
+
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
             Session hibernateSession = currentSession.getHibernateSession();
             hibernateSession.merge(object);
+            sessionManager.commitSession();
         } catch (Exception e) {
+            sessionManager.rollbackSession();
 
             throw new UserDaoException(e);
+        } finally {
+            sessionManager.close();
         }
     }
 
