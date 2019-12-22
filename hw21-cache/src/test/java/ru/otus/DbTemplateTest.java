@@ -62,7 +62,7 @@ public class DbTemplateTest {
         long start1 = System.currentTimeMillis();
         final var user = dbServiceUser.getObject(1, User.class);
         long time1 = System.currentTimeMillis() - start1;
-
+        dbServiceUser.updateObject(user.get());
         long start2 = System.currentTimeMillis();
         final var user1 = dbServiceUser.getObject(1, User.class);
         long time2 = System.currentTimeMillis() - start2;

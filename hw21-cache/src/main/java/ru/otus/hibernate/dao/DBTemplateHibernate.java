@@ -60,7 +60,7 @@ public class DBTemplateHibernate<T> implements DBTemplate<T> {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         try {
             Session hibernateSession = currentSession.getHibernateSession();
-            final var merge = hibernateSession.merge(object);
+            hibernateSession.merge(object);
             sessionManager.commitSession();
         } catch (Exception e) {
             sessionManager.rollbackSession();

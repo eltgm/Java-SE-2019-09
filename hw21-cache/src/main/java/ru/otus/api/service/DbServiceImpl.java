@@ -23,11 +23,12 @@ public class DbServiceImpl<T> implements DBService<T> {
     @Override
     public Optional<T> getObject(long id, Class<T> clazz) {
         Optional<T> userOptional;
-        if (cache.get(String.valueOf(id)) == null) {
+        final var cachedValue = cache.get(String.valueOf(id));
+        if (cachedValue == null) {
             userOptional = dbTemplate.findById(id, clazz);
-            cache.put(String.valueOf(id), userOptional.orElse(null));
+            cache.put(String.valueOf(id), userOptional.get());
         } else
-            userOptional = Optional.of(cache.get(String.valueOf(id)));
+            userOptional = Optional.of(cachedValue);
         return userOptional;
     }
 
