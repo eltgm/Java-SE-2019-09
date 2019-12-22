@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DbTemplateTest {
-    private static final HwListener<String, User> hwListener =
+    private static final HwListener<User> hwListener =
             (key, value, action) -> System.out.println(action + " value " + value + " with key " + key);
-    private static HwCache<String, User> cache;
+    private static HwCache<User> cache;
     private static DBService<User> dbServiceUser;
 
     @BeforeAll
@@ -50,6 +50,7 @@ public class DbTemplateTest {
         dbServiceUser = new DbServiceImpl<>(cache, dbTemplate);
 
         dbServiceUser.saveObject(user);
+        System.out.println("test");
     }
 
     @AfterAll
@@ -62,7 +63,7 @@ public class DbTemplateTest {
         long start1 = System.currentTimeMillis();
         final var user = dbServiceUser.getObject(1, User.class);
         long time1 = System.currentTimeMillis() - start1;
-        dbServiceUser.updateObject(user.get());
+
         long start2 = System.currentTimeMillis();
         final var user1 = dbServiceUser.getObject(1, User.class);
         long time2 = System.currentTimeMillis() - start2;

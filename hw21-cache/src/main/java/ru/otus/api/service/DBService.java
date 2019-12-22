@@ -8,5 +8,5 @@ public interface DBService<T> {
 
     Optional<T> getObject(long id, Class<T> clazz);
 
-    void updateObject(T object);
+    void updateObject(long id, T object);
 }

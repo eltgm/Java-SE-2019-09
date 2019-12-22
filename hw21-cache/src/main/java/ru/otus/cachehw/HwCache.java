@@ -4,13 +4,13 @@ package ru.otus.cachehw;
  * @author sergey
  * created on 14.12.18.
  */
-public interface HwCache<K, V> {
+public interface HwCache<V> {
 
-    void put(K key, V value);
+    void put(String key, V value);
 
-    void remove(K key);
+    void remove(String key);
 
-    V get(K key);
+    V get(String key);
 
     void addListener(HwListener listener);
 

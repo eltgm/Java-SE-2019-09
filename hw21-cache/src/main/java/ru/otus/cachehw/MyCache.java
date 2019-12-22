@@ -9,27 +9,27 @@ import java.util.WeakHashMap;
  * @author sergey
  * created on 14.12.18.
  */
-public class MyCache<K, V> implements HwCache<K, V> {
+public class MyCache<V> implements HwCache<V> {
     //Надо реализовать эти методы
-    private final List<HwListener<K, V>> listeners = new ArrayList<>();
-    private final Map<K, V> cache = new WeakHashMap<>();
+    private final List<HwListener<V>> listeners = new ArrayList<>();
+    private final Map<String, V> cache = new WeakHashMap<>();
 
     @Override
-    public void put(K key, V value) {
+    public void put(String key, V value) {
         cache.put(key, value);
         listeners.forEach(kvHwListener ->
                 kvHwListener.notify(key, value, "PUT"));
     }
 
     @Override
-    public void remove(K key) {
+    public void remove(String key) {
         final var removedValue = cache.remove(key);
         listeners.forEach(kvHwListener ->
                 kvHwListener.notify(key, removedValue, "REMOVE"));
     }
 
     @Override
-    public V get(K key) {
+    public V get(String key) {
         return cache.get(key);
     }
 

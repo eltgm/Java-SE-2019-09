@@ -1,10 +1,7 @@
 package ru.otus.api.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 @Setter
+@Getter
 
 @Entity
 @Table(name = "users")
