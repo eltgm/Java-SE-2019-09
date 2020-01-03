@@ -34,6 +34,7 @@
         <module>hw15-io</module>
         <module>hw17-jdbc</module>
         <module>hw19-hibernate</module>
+        <module>hw21-cache</module>
     </modules>
 
     <properties>
