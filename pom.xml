@@ -35,6 +35,7 @@
         <module>hw17-jdbc</module>
         <module>hw19-hibernate</module>
         <module>hw21-cache</module>
+        <module>hw23-webServer</module>
     </modules>
 
     <properties>
