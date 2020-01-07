@@ -12,7 +12,7 @@
             const login = userLoginTextBox.value;
             const password = userPasswordTextBox.value;
 
-            fetch('/users', {
+            fetch('/createUser', {
                 method: "POST",
                 body: JSON.stringify({
                     name: name,
@@ -22,7 +22,7 @@
             })
                 .then(response => response.json())
                 .then(user => {
-                    var text = '<td>' + user.id + '</td>\n' +
+                    let text = '<td>' + user.id + '</td>\n' +
                         '        <td>' + user.name + '</td>\n' +
                         '        <td>' + user.login + '</td>\n' +
                         '        <td>' + user.password + '</td>';
@@ -58,8 +58,7 @@
         <td>${user.login}</td>
         <td>${user.password}</td>
     </tr>
-    </
-    #list>
+    </#list>
     </tbody>
 </table>
 </body>

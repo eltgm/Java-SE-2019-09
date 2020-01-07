@@ -16,6 +16,7 @@ import org.eclipse.jetty.util.security.Constraint;
 import ru.otus.api.service.DBServiceUser;
 import ru.otus.api.service.TemplateProcessor;
 import ru.otus.helpers.FileSystemHelper;
+import ru.otus.servlet.CreateUserServlet;
 import ru.otus.servlet.UsersServlet;
 
 import java.util.ArrayList;
@@ -87,13 +88,13 @@ public class UsersWebServerImpl implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao, gson)), "/users");
-        //servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/add");
+        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new CreateUserServlet(userDao, gson)), "/createUser");
         return servletContextHandler;
     }
 
     private Handler applySecurity(ServletContextHandler servletContextHandler) {
-        return createBasicAuthSecurityHandler(servletContextHandler, "/users", "/api/user/*");
+        return createBasicAuthSecurityHandler(servletContextHandler, "/users", "/createUser");
     }
 
     private SecurityHandler createBasicAuthSecurityHandler(ServletContextHandler context, String... paths) {

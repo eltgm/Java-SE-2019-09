@@ -35,23 +35,8 @@ public class Main {
         var dbTemplate = new UserDaoHibernate(sessionManager);
         var dbServiceUser = new DbServiceUserImpl(dbTemplate);
 
-        var user = User.builder()
-                .name("Vlad")
-                .address(AddressDataSet.builder()
-                        .street("Sportivnaya")
-                        .build())
-                .login("testUser")
-                .password("1234444")
-                .role("user")
-                .build();
+        dbServiceUser.getInitializer().init();
 
-        user.addPhone(PhoneDataSet.builder()
-                .number("+79777777777")
-                .user(user)
-                .build());
-
-        dbServiceUser.saveUser(user);
-        dbServiceUser.saveUser(user);
         webServer = new UsersWebServerImpl(WEB_SERVER_PORT,
                 new HashLoginService(REALM_NAME, hashLoginServiceConfigPath),
                 dbServiceUser,
