@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Пользователи</title>
+    <script>
+        function addUser() {
+            const userNameTextBox = document.getElementById('userNameTextBox');
+            const userLoginTextBox = document.getElementById('userLoginTextBox');
+            const userPasswordTextBox = document.getElementById('userPasswordTextBox');
+            const userDataContainer = document.getElementById('userDataContainer');
+
+            const name = userNameTextBox.value;
+            const login = userLoginTextBox.value;
+            const password = userPasswordTextBox.value;
+
+            fetch('/api/user/add', {
+                method: "POST",
+                body: JSON.stringify({
+                    name: name,
+                    login: login,
+                    password: password
+                })
+            })
+                .then(response => response.json())
+                .then(user => {
+                    const text = '<td>' + user.id + '</td>\n' +
+                        '        <td>' + user.name + '</td>\n' +
+                        '        <td>' + user.login + '</td>\n' +
+                        '        <td>' + user.password + '</td>';
+
+                    userDataContainer.innerHTML += text;
+                });
+        }
+    </script>
+</head>
+
+<body>
+<h4>Создать нового пользователя</h4>
+<input id="userNameTextBox" placeholder="Введите имя нового пользователя" type="text">
+<input id="userLoginTextBox" placeholder="Введите логин нового пользователя" type="text">
+<input id="userPasswordTextBox" placeholder="Введите пароль нового пользователя" type="text">
+<button onclick="addUser()">Создать</button>
+
+
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 150px">Имя</td>
+        <td style="width: 100px">Логин</td>
+        <td style="width: 100px">Пароль</td>
+    </tr>
+    </thead>
+    <tbody id="userDataContainer">
+    <#list users as user>
+    <tr>
+        <td>${user.id}</td>
+        <td>${user.name}</td>
+        <td>${user.login}</td>
+        <td>${user.password}</td>
+    </tr>
+    </#list>
+    </tbody>
+</table>
+</body>
+</html>
