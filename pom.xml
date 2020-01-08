@@ -36,6 +36,7 @@
         <module>hw19-hibernate</module>
         <module>hw21-cache</module>
         <module>hw23-webServer</module>
+        <module>hw24-DI</module>
     </modules>
 
     <properties>
