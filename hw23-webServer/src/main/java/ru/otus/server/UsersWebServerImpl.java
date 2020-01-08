@@ -89,12 +89,12 @@ public class UsersWebServerImpl implements UsersWebServer {
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
-        servletContextHandler.addServlet(new ServletHolder(new CreateUserServlet(userDao, gson)), "/createUser");
+        servletContextHandler.addServlet(new ServletHolder(new CreateUserServlet(userDao, gson)), "/api/user/add");
         return servletContextHandler;
     }
 
     private Handler applySecurity(ServletContextHandler servletContextHandler) {
-        return createBasicAuthSecurityHandler(servletContextHandler, "/users", "/createUser");
+        return createBasicAuthSecurityHandler(servletContextHandler, "/users", "/api/user/add");
     }
 
     private SecurityHandler createBasicAuthSecurityHandler(ServletContextHandler context, String... paths) {
