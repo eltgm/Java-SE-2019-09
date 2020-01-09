@@ -3,7 +3,7 @@ package ru.otus.hibernate.dao;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.dao.UserDaoException;
 import ru.otus.api.model.User;
@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 public class UserDaoHibernate implements UserDao {
     private final SessionManagerHibernate sessionManager;
 

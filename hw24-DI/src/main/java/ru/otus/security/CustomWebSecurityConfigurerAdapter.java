@@ -21,7 +21,7 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/**").hasRole("ADMIN")
                 .and().formLogin().defaultSuccessUrl("/", false);
     }
 }

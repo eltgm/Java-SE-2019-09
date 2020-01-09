@@ -1,6 +1,6 @@
 package ru.otus.api.service;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.model.User;
 import ru.otus.hibernate.DbInitializer;
@@ -8,15 +8,14 @@ import ru.otus.hibernate.DbInitializer;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class DbServiceUserImpl implements DBServiceUser {
     private final DbInitializer dbInitializer;
     private final UserDao userDao;
 
-    public DbServiceUserImpl(UserDao userDao) {
+    public DbServiceUserImpl(UserDao userDao, DbInitializer dbInitializer) {
         this.userDao = userDao;
-        this.dbInitializer = new DbInitializer(userDao);
-        dbInitializer.init();
+        this.dbInitializer = dbInitializer;
     }
 
     public Long saveUser(User user) {
@@ -28,10 +27,6 @@ public class DbServiceUserImpl implements DBServiceUser {
         Optional<User> userOptional = userDao.findUserById(id);
 
         return userOptional;
-    }
-
-    public DbInitializer getInitializer() {
-        return dbInitializer;
     }
 
     @Override

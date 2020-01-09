@@ -1,10 +1,12 @@
 package ru.otus.hibernate;
 
+import org.springframework.stereotype.Component;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.model.AddressDataSet;
 import ru.otus.api.model.PhoneDataSet;
 import ru.otus.api.model.User;
 
+@Component
 public class DbInitializer {
     private final UserDao userDao;
 
