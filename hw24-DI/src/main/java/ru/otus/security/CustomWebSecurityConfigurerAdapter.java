@@ -23,6 +23,8 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
         http.authorizeRequests()
                 .antMatchers("/**").hasRole("ADMIN")
                 .and().formLogin()
+                .passwordParameter("otus_app_user_pwd")
+                .usernameParameter("otus_app_user")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl("/", false);
     }
