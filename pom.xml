@@ -37,6 +37,7 @@
         <module>hw21-cache</module>
         <module>hw23-webServer</module>
         <module>hw24-DI</module>
+        <module>hw27-JMM</module>
     </modules>
 
     <properties>
