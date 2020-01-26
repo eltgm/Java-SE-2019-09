@@ -11,6 +11,7 @@ public class DbInitializer {
 
     public DbInitializer(UserDao userDao) {
         this.userDao = userDao;
+        this.init();
     }
 
     public void init() {

@@ -2,21 +2,24 @@ package ru.otus.messagesystem;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import ru.otus.Serializers;
 
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Service
 public class MsClientImpl implements MsClient {
     private static final Logger logger = LoggerFactory.getLogger(MsClientImpl.class);
-
+    private final Serializers serializer;
     private final String name;
     private final MessageSystem messageSystem;
     private final Map<String, RequestHandler> handlers = new ConcurrentHashMap<>();
 
 
-    public MsClientImpl(String name, MessageSystem messageSystem) {
+    public MsClientImpl(Serializers serializer, String name, MessageSystem messageSystem) {
+        this.serializer = serializer;
         this.name = name;
         this.messageSystem = messageSystem;
     }
@@ -57,7 +60,7 @@ public class MsClientImpl implements MsClient {
 
     @Override
     public <T> Message produceMessage(String to, T data, MessageType msgType) {
-        return new Message(name, to, null, msgType.getValue(), Serializers.serialize(data));
+        return new Message(name, to, null, msgType.getValue(), serializer.serialize(data));
     }
 
 

@@ -12,10 +12,11 @@ import java.util.UUID;
 
 public class GetUsersResponseHandler implements RequestHandler {
     private static final Logger logger = LoggerFactory.getLogger(GetUsersResponseHandler.class);
-
+    private final Serializers serializer;
     private final FrontendService frontendService;
 
-    public GetUsersResponseHandler(FrontendService frontendService) {
+    public GetUsersResponseHandler(Serializers serializer, FrontendService frontendService) {
+        this.serializer = serializer;
         this.frontendService = frontendService;
     }
 
@@ -23,7 +24,7 @@ public class GetUsersResponseHandler implements RequestHandler {
     public Optional<Message> handle(Message msg) {
         logger.info("new message:{}", msg);
         try {
-            String userData = Serializers.deserialize(msg.getPayload(), String.class);
+            String userData = serializer.deserialize(msg.getPayload(), String.class);
             UUID sourceMessageId = msg.getSourceMessageId().orElseThrow(() -> new RuntimeException("Not found sourceMsg for message:" + msg.getId()));
             frontendService.takeConsumer(sourceMessageId, String.class).ifPresent(consumer -> consumer.accept(userData));
 

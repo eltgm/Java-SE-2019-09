@@ -15,7 +15,7 @@ const createUser = () => stompClient.send("/app/add", {}, JSON.stringify({
 }));
 
 const addUsers = (messageStr) => {
-    let text;
+    let text = "";
     let itemsProc = 0;
     messageStr.forEach(messageStrKey => {
         itemsProc++;
@@ -29,7 +29,7 @@ const addUsers = (messageStr) => {
 };
 
 function callback(text) {
-    $("#userDataContainer").append(text);
+    $("#userDataContainer").html(text);
 }
 
 const disconnect = () => {

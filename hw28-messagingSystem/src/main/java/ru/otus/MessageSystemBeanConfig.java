@@ -2,16 +2,16 @@ package ru.otus;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.otus.api.dao.UserDao;
 import ru.otus.api.service.DBServiceUser;
-import ru.otus.api.service.DbServiceUserImpl;
 import ru.otus.api.service.handlers.CreateUserRequestHandler;
 import ru.otus.api.service.handlers.GetUsersRequestHandler;
 import ru.otus.front.FrontendService;
-import ru.otus.front.FrontendServiceImpl;
 import ru.otus.front.handlers.CreateUserResponseHandler;
 import ru.otus.front.handlers.GetUsersResponseHandler;
-import ru.otus.messagesystem.*;
+import ru.otus.messagesystem.MessageSystem;
+import ru.otus.messagesystem.MessageType;
+import ru.otus.messagesystem.MsClient;
+import ru.otus.messagesystem.MsClientImpl;
 
 @Configuration
 public class MessageSystemBeanConfig {
@@ -19,29 +19,31 @@ public class MessageSystemBeanConfig {
     private static final String DATABASE_SERVICE_CLIENT_NAME = "databaseService";
 
     @Bean
-    public MessageSystem createMessageSystem() {
-        return new MessageSystemImpl();
-    }
+    public MsClient createDbClient(DBServiceUser dbService, MessageSystem messageSystem, Serializers serializer) {
+        MsClient databaseMsClient = new MsClientImpl(serializer, DATABASE_SERVICE_CLIENT_NAME, messageSystem);
 
-    @Bean
-    public DBServiceUser createDbClient(UserDao userDao, MessageSystem messageSystem) {
-        MsClient databaseMsClient = new MsClientImpl(DATABASE_SERVICE_CLIENT_NAME, messageSystem);
-        DBServiceUser dbService = new DbServiceUserImpl(userDao);
-        databaseMsClient.addHandler(MessageType.USER_DATA, new GetUsersRequestHandler(dbService));
-        databaseMsClient.addHandler(MessageType.CREATE_USER, new CreateUserRequestHandler(dbService));
+        databaseMsClient.addHandler(MessageType.USER_DATA, new GetUsersRequestHandler(dbService, serializer));
+        databaseMsClient.addHandler(MessageType.CREATE_USER, new CreateUserRequestHandler(dbService, serializer));
         messageSystem.addClient(databaseMsClient);
 
-        return dbService;
+        return databaseMsClient;
     }
 
     @Bean
-    public FrontendService createFrontClient(MessageSystem messageSystem) {
-        MsClient frontendMsClient = new MsClientImpl(FRONTEND_SERVICE_CLIENT_NAME, messageSystem);
-        FrontendService frontendService = new FrontendServiceImpl(frontendMsClient, DATABASE_SERVICE_CLIENT_NAME);
-        frontendMsClient.addHandler(MessageType.USER_DATA, new GetUsersResponseHandler(frontendService));
-        frontendMsClient.addHandler(MessageType.CREATE_USER, new CreateUserResponseHandler(frontendService));
+    public String getDatabaseServiceClientName() {
+        return DATABASE_SERVICE_CLIENT_NAME;
+    }
+
+    @Bean
+    public MsClient createFrontClient(MessageSystem messageSystem, Serializers serializer
+            , FrontendService frontendService) {
+        MsClient frontendMsClient = new MsClientImpl(serializer, FRONTEND_SERVICE_CLIENT_NAME, messageSystem);
+        //FrontendService frontendService = new FrontendServiceImpl(frontendMsClient, DATABASE_SERVICE_CLIENT_NAME);
+
+        frontendMsClient.addHandler(MessageType.USER_DATA, new GetUsersResponseHandler(serializer, frontendService));
+        frontendMsClient.addHandler(MessageType.CREATE_USER, new CreateUserResponseHandler(serializer, frontendService));
         messageSystem.addClient(frontendMsClient);
 
-        return frontendService;
+        return frontendMsClient;
     }
 }

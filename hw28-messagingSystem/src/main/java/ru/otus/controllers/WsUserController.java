@@ -24,7 +24,11 @@ public class WsUserController {
     @MessageMapping("/add")
     public void getMessage(String user) {
         final var userFromJson = new Gson().fromJson(user, User.class);
-        frontendService.createUser(logger::info, userFromJson);
+        frontendService.createUser(s -> {
+            if (Long.parseLong(s) >= 0)
+                frontendService.getUsersData(users ->
+                        messagingTemplate.convertAndSend("/topic/list", users));
+        }, userFromJson);
     }
 
     @SubscribeMapping("/list")

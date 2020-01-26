@@ -2,6 +2,9 @@ package ru.otus.front;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import ru.otus.api.model.User;
 import ru.otus.messagesystem.Message;
 import ru.otus.messagesystem.MessageType;
@@ -13,7 +16,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import static org.springframework.messaging.simp.stomp.DefaultStompSession.EMPTY_PAYLOAD;
 
+@Service
 public class FrontendServiceImpl implements FrontendService {
     private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
@@ -21,14 +26,14 @@ public class FrontendServiceImpl implements FrontendService {
     private final MsClient msClient;
     private final String databaseServiceClientName;
 
-    public FrontendServiceImpl(MsClient msClient, String databaseServiceClientName) {
+    public FrontendServiceImpl(@Lazy @Qualifier("createFrontClient") MsClient msClient, String databaseServiceClientName) {
         this.msClient = msClient;
         this.databaseServiceClientName = databaseServiceClientName;
     }
 
     @Override
     public void getUsersData(Consumer<String> dataConsumer) {
-        Message outMsg = msClient.produceMessage(databaseServiceClientName, 1L, MessageType.USER_DATA);
+        Message outMsg = msClient.produceMessage(databaseServiceClientName, EMPTY_PAYLOAD, MessageType.USER_DATA);
         consumerMap.put(outMsg.getId(), dataConsumer);
         msClient.sendMessage(outMsg);
     }

@@ -1,11 +1,13 @@
 package ru.otus.api.service;
 
+import org.springframework.stereotype.Service;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class DbServiceUserImpl implements DBServiceUser {
     private final UserDao userDao;
 

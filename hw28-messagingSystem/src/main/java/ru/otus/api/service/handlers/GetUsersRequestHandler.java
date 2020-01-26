@@ -14,9 +14,11 @@ import java.util.Optional;
 @Component
 public class GetUsersRequestHandler implements RequestHandler {
     private final DBServiceUser dbService;
+    private final Serializers serializer;
 
-    public GetUsersRequestHandler(DBServiceUser dbService) {
+    public GetUsersRequestHandler(DBServiceUser dbService, Serializers serializer) {
         this.dbService = dbService;
+        this.serializer = serializer;
     }
 
     @Override
@@ -24,6 +26,6 @@ public class GetUsersRequestHandler implements RequestHandler {
         final var all = dbService.getAll();
 
         String data = new Gson().toJson(all);
-        return Optional.of(new Message(msg.getTo(), msg.getFrom(), msg.getId(), MessageType.USER_DATA.getValue(), Serializers.serialize(data)));
+        return Optional.of(new Message(msg.getTo(), msg.getFrom(), msg.getId(), MessageType.USER_DATA.getValue(), serializer.serialize(data)));
     }
 }

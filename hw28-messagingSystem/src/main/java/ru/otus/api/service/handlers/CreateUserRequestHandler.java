@@ -11,16 +11,18 @@ import java.util.Optional;
 
 public class CreateUserRequestHandler implements RequestHandler {
     private final DBServiceUser dbService;
+    private final Serializers serializer;
 
-    public CreateUserRequestHandler(DBServiceUser dbService) {
+    public CreateUserRequestHandler(DBServiceUser dbService, Serializers serializer) {
         this.dbService = dbService;
+        this.serializer = serializer;
     }
 
     @Override
     public Optional<Message> handle(Message msg) {
-        final var userToSave = Serializers.deserialize(msg.getPayload(), User.class);
+        final var userToSave = serializer.deserialize(msg.getPayload(), User.class);
         final var userId = dbService.saveUser(userToSave);
 
-        return Optional.of(new Message(msg.getTo(), msg.getFrom(), msg.getId(), MessageType.CREATE_USER.getValue(), Serializers.serialize(userId.toString())));
+        return Optional.of(new Message(msg.getTo(), msg.getFrom(), msg.getId(), MessageType.CREATE_USER.getValue(), serializer.serialize(userId.toString())));
     }
 }
