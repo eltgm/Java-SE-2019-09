@@ -2,7 +2,6 @@ package ru.otus.front;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import ru.otus.api.model.User;
@@ -23,26 +22,26 @@ public class FrontendServiceImpl implements FrontendService {
     private static final Logger logger = LoggerFactory.getLogger(FrontendServiceImpl.class);
 
     private final Map<UUID, Consumer<?>> consumerMap = new ConcurrentHashMap<>();
-    private final MsClient msClient;
+    private final MsClient frontendMsClient;
     private final String databaseServiceClientName;
 
-    public FrontendServiceImpl(@Lazy @Qualifier("createFrontClient") MsClient msClient, String databaseServiceClientName) {
-        this.msClient = msClient;
+    public FrontendServiceImpl(@Lazy MsClient frontendMsClient, String databaseServiceClientName) {
+        this.frontendMsClient = frontendMsClient;
         this.databaseServiceClientName = databaseServiceClientName;
     }
 
     @Override
     public void getUsersData(Consumer<String> dataConsumer) {
-        Message outMsg = msClient.produceMessage(databaseServiceClientName, EMPTY_PAYLOAD, MessageType.USER_DATA);
+        Message outMsg = frontendMsClient.produceMessage(databaseServiceClientName, EMPTY_PAYLOAD, MessageType.USER_DATA);
         consumerMap.put(outMsg.getId(), dataConsumer);
-        msClient.sendMessage(outMsg);
+        frontendMsClient.sendMessage(outMsg);
     }
 
     @Override
     public void createUser(Consumer<String> dataConsumer, User user) {
-        Message outMsg = msClient.produceMessage(databaseServiceClientName, user, MessageType.CREATE_USER);
+        Message outMsg = frontendMsClient.produceMessage(databaseServiceClientName, user, MessageType.CREATE_USER);
         consumerMap.put(outMsg.getId(), dataConsumer);
-        msClient.sendMessage(outMsg);
+        frontendMsClient.sendMessage(outMsg);
     }
 
     @Override

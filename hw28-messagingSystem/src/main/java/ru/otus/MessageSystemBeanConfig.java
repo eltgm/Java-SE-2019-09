@@ -34,11 +34,10 @@ public class MessageSystemBeanConfig {
         return DATABASE_SERVICE_CLIENT_NAME;
     }
 
-    @Bean
+    @Bean(name = "frontendMsClient")
     public MsClient createFrontClient(MessageSystem messageSystem, Serializers serializer
             , FrontendService frontendService) {
         MsClient frontendMsClient = new MsClientImpl(serializer, FRONTEND_SERVICE_CLIENT_NAME, messageSystem);
-        //FrontendService frontendService = new FrontendServiceImpl(frontendMsClient, DATABASE_SERVICE_CLIENT_NAME);
 
         frontendMsClient.addHandler(MessageType.USER_DATA, new GetUsersResponseHandler(serializer, frontendService));
         frontendMsClient.addHandler(MessageType.CREATE_USER, new CreateUserResponseHandler(serializer, frontendService));
