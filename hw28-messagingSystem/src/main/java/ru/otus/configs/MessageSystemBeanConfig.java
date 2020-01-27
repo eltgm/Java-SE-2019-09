@@ -1,7 +1,8 @@
-package ru.otus;
+package ru.otus.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import ru.otus.Serializers;
 import ru.otus.api.service.DBServiceUser;
 import ru.otus.api.service.handlers.CreateUserRequestHandler;
 import ru.otus.api.service.handlers.GetUsersRequestHandler;

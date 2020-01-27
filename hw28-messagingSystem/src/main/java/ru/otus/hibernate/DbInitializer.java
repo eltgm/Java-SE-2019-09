@@ -1,17 +1,14 @@
 package ru.otus.hibernate;
 
-import org.springframework.stereotype.Service;
 import ru.otus.api.dao.UserDao;
 import ru.otus.api.model.AddressDataSet;
 import ru.otus.api.model.User;
 
-@Service
 public class DbInitializer {
     private final UserDao userDao;
 
     public DbInitializer(UserDao userDao) {
         this.userDao = userDao;
-        this.init();
     }
 
     public void init() {
