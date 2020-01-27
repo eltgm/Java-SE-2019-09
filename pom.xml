@@ -38,6 +38,7 @@
         <module>hw23-webServer</module>
         <module>hw24-DI</module>
         <module>hw27-JMM</module>
+        <module>hw28-messagingSystem</module>
     </modules>
 
     <properties>
