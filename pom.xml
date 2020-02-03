@@ -39,6 +39,7 @@
         <module>hw24-DI</module>
         <module>hw27-JMM</module>
         <module>hw28-messagingSystem</module>
+        <module>hw31-multiprocess</module>
     </modules>
 
     <properties>
