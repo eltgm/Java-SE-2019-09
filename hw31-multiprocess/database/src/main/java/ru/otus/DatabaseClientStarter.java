@@ -10,19 +10,15 @@ import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
 import ru.otus.messagesystem.MessageType;
 import ru.otus.messagesystem.MsClientImpl;
 
-import java.net.Socket;
-
 public class DatabaseClientStarter {
-    private static final int PORT = 8080;
-    private static final String HOST = "localhost";
     private static final String DATABASE_SERVICE_CLIENT_NAME = "databaseService";
 
     public static void main(String[] args) {
-
         new DatabaseClientStarter().connectToMessageServer();
     }
 
-    private void initDbService(Serializer serializer, Socket messageServer) {
+    private void initDbService(Serializer serializer) {
+
         var sessionFactory = HibernateUtils.buildSessionFactory("hibernate.cfg.xml", ru.otus.models.User.class, ru.otus.models.AddressDataSet.class);
 
         var sessionManager = new SessionManagerHibernate(sessionFactory);
@@ -32,7 +28,7 @@ public class DatabaseClientStarter {
         DbInitializer initializer = new DbInitializer(dbTemplate);
         initializer.init();
 
-        var databaseMsClient = new MsClientImpl(serializer, DATABASE_SERVICE_CLIENT_NAME, messageServer);
+        var databaseMsClient = new MsClientImpl(serializer, DATABASE_SERVICE_CLIENT_NAME);
 
         databaseMsClient.addHandler(MessageType.USER_DATA, new GetUsersRequestHandler(dbService, serializer));
         databaseMsClient.addHandler(MessageType.CREATE_USER, new CreateUserRequestHandler(dbService, serializer));
@@ -42,8 +38,7 @@ public class DatabaseClientStarter {
 
     private void connectToMessageServer() {
         try {
-            Socket clientSocket = new Socket(HOST, PORT);
-            initDbService(new Serializer(), clientSocket);
+            initDbService(new Serializer());
         } catch (Exception e) {
             e.fillInStackTrace();
         }

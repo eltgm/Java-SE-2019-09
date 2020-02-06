@@ -19,21 +19,24 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 public class MsClientImpl implements MsClient {
+    private static final int PORT = 8080;
+    private static final String HOST = "localhost";
+
     private static final Logger logger = LoggerFactory.getLogger(MsClientImpl.class);
     private final Gson gson = new Gson();
     private final Serializer serializer;
     private final String name;
-    private final Socket messageSystem;
     private final Map<String, RequestHandler> handlers = new ConcurrentHashMap<>();
+    private Socket messageSystem;
     private PrintWriter messageSystemOut;
     private BufferedReader messageSystemIn;
 
-    public MsClientImpl(Serializer serializer, String name, Socket messageSystem) {
+    public MsClientImpl(Serializer serializer, String name) {
         this.serializer = serializer;
         this.name = name;
-        this.messageSystem = messageSystem;
 
         try {
+            this.messageSystem = new Socket(HOST, PORT);
             messageSystemOut = new PrintWriter(messageSystem.getOutputStream(), true);
             messageSystemIn = new BufferedReader(new InputStreamReader(messageSystem.getInputStream()));
 
@@ -81,13 +84,7 @@ public class MsClientImpl implements MsClient {
     public boolean sendMessage(Message msg) {
         messageSystemOut.println(gson.toJson(msg));
         messageSystemOut.flush();
-        /*messageSystemOut.println(msg);
-        final var s = messageSystemIn.readLine();
-        System.out.println(s);
-        *//*boolean result = messageSystem.newMessage(msg);
-        if (!result) {
-            logger.error("the last message was rejected: {}", msg);
-        }*/
+
         return true;
     }
 

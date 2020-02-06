@@ -2,7 +2,7 @@ package ru.otus;
 
 public interface MessageSystem {
 
-    void addClient(MessageSystemImpl.Client client, String clientName);
+    void addClient(Client client, String clientName);
 
     void removeClient(String clientId);
 

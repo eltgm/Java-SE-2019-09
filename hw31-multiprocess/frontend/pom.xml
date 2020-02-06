@@ -83,6 +83,12 @@
             <artifactId>gson</artifactId>
             <version>${gson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.otus</groupId>
+            <artifactId>constants</artifactId>
+            <version>2019-09-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

@@ -17,6 +17,7 @@
         <module>frontend</module>
         <module>database</module>
         <module>messagesystem</module>
+        <module>constants</module>
     </modules>
     <build>
         <pluginManagement>
