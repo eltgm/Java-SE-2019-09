@@ -15,12 +15,12 @@ public class CallerIDController {
     }
 
     @PostMapping("/caller/add")
-    public boolean createNewCaller(Caller caller) {
+    public boolean getCaller(Caller caller) {
         return callerIDService.createCaller(caller);
     }
 
     @GetMapping("/caller/get")
-    public Caller createNewCaller(String telephoneNumber) {
+    public Caller getCaller(String telephoneNumber) {
         return callerIDService.getCallerByNumber(telephoneNumber);
     }
 }
