@@ -1,7 +1,6 @@
 package ru.otus.services;
 
 import org.springframework.stereotype.Service;
-import ru.otus.exceptions.CallerNotFoundException;
 import ru.otus.models.Caller;
 import ru.otus.repositories.CallersRepository;
 
@@ -15,8 +14,9 @@ public class CallerIDServiceImpl implements CallerIDService {
 
     @Override
     public boolean createCaller(Caller caller) {
-        if (callersRepository.findByTelephoneNumber(caller.getTelephoneNumber()).isPresent())
+        if (callersRepository.findByTelephoneNumber(caller.getTelephoneNumber()).isPresent()) {
             return false;
+        }
 
         callersRepository.save(caller);
 
@@ -27,9 +27,6 @@ public class CallerIDServiceImpl implements CallerIDService {
     public Caller getCallerByNumber(String telephoneNumber) {
         final var caller = callersRepository.findByTelephoneNumber(telephoneNumber);
 
-        if (caller.isPresent())
-            return caller.get();
-
-        throw new CallerNotFoundException("Данного абонента нет в системе!");
+        return caller.orElseGet(Caller::new);
     }
 }

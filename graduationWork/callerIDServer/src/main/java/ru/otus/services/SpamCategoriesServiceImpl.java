@@ -18,7 +18,7 @@ public class SpamCategoriesServiceImpl implements SpamCategoriesService {
     @Override
     public List<String> getSpamTypes() {
         return spamCategoriesRepository.findAll()
-                .parallelStream()
+                .stream()
                 .map(SpamType::getType)
                 .collect(Collectors.toList());
     }
