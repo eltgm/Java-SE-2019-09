@@ -30,7 +30,6 @@ public class SpamerInfoPresenter extends BasePresenter<AddSpamerView> {
                 .subscribeWith(new DisposableSingleObserver<Boolean>() {
                     @Override
                     public void onSuccess(Boolean aBoolean) {
-                        System.out.println(aBoolean);
                         if (aBoolean) {
                             getViewState().closeActivity("Спамер успешно добавлен!");
                         }
@@ -39,6 +38,7 @@ public class SpamerInfoPresenter extends BasePresenter<AddSpamerView> {
                     @Override
                     public void onError(Throwable e) {
                         getViewState().showError("Спамер уже существует!");
+                        removeSpamer(caller);
                     }
                 }));
     }
@@ -50,7 +50,6 @@ public class SpamerInfoPresenter extends BasePresenter<AddSpamerView> {
                 .subscribeWith(new DisposableSingleObserver<Boolean>() {
                     @Override
                     public void onSuccess(Boolean aBoolean) {
-                        System.out.println(aBoolean);
                         if (aBoolean) {
                             getViewState().closeActivity("Абонент удален из списка спамеров!");
                         }

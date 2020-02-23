@@ -85,7 +85,8 @@ public class CallerRepository {
     }
 
     public Observable<Boolean> createCaller(Caller caller) {
-        return Observable.merge(databaseCallerDataStore.saveCaller(caller), cacheCallerDataStore.saveCaller(caller))
+        return Observable.merge(databaseCallerDataStore.saveCaller(caller),
+                cacheCallerDataStore.saveCaller(caller), networkCallerDataStore.saveCaller(caller))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

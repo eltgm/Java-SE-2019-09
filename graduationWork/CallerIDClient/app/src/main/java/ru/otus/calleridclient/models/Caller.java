@@ -5,6 +5,9 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +27,8 @@ import ru.otus.calleridclient.models.converters.SpamTypeConverter;
 public class Caller {
     @PrimaryKey(autoGenerate = true)
     private long id;
+    @SerializedName("telephoneNumber")
+    @Expose
     private String telephoneNumber;
     @TypeConverters({SpamTypeConverter.class})
     private List<String> spamCategories;

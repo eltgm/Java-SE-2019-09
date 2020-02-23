@@ -3,7 +3,13 @@ package ru.otus.app;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.bson.types.ObjectId;
+import org.modelmapper.Converter;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.gson.JsonElementValueReader;
+import org.modelmapper.spi.MappingContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -49,5 +55,20 @@ public class Application {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        final ModelMapper modelMapper = new ModelMapper();
+
+        modelMapper.getConfiguration().addValueReader(new JsonElementValueReader());
+        modelMapper.addConverter(new Converter<String, List<String>>() {
+            @Override
+            public List<String> convert(MappingContext<String, List<String>> context) {
+                return new Gson().fromJson(context.getSource(), new TypeToken<List<String>>() {
+                }.getType());
+            }
+        });
+        return modelMapper;
     }
 }

@@ -2,6 +2,7 @@ package ru.otus.services;
 
 import org.springframework.stereotype.Service;
 import ru.otus.models.Caller;
+import ru.otus.models.Message;
 import ru.otus.repositories.CallersRepository;
 
 @Service
@@ -13,14 +14,12 @@ public class CallerIDServiceImpl implements CallerIDService {
     }
 
     @Override
-    public boolean createCaller(Caller caller) {
-        if (callersRepository.findByTelephoneNumber(caller.getTelephoneNumber()).isPresent()) {
-            return false;
-        }
-
+    public Message createCaller(Caller caller) {
         callersRepository.save(caller);
 
-        return true;
+        return Message.builder()
+                .status(true)
+                .build();
     }
 
     @Override
