@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:context="http://schemas.android.com/apk/res-auto"
+    context:fontProviderAuthority="com.google.android.gms.fonts"
+    context:fontProviderCerts="@array/com_google_android_gms_fonts_certs"
+    context:fontProviderPackage="com.google.android.gms"
+    context:fontProviderQuery="name=Roboto Mono&amp;weight=100"></font-family>

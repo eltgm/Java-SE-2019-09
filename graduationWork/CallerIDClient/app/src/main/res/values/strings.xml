@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CallerIDClient</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="comment">Комментарий</string>
+    <string name="change_categories">ИЗМЕНИТЬ КАТЕГОРИИ</string>
+    <string name="categories">Категории</string>
+    <string name="new_spamer">Новый спамер</string>
+    <string name="accept">Подтвердить</string>
+    <string name="bank">Банк</string>
+    <string name="no_spam">ЭТО НЕ СПАМ</string>
 </resources>
