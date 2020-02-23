@@ -53,7 +53,7 @@ public class NetworkCallerDataStore implements CallerDataStore {
                 .flatMap((Function<Message, ObservableSource<Boolean>>) message ->
                         Observable
                                 .create(emitter -> {
-                                    if (message.isStatus()) 
+                                    if (message.isStatus())
                                         emitter.onNext(message.isStatus());
                                     else if (message.getMessage().equals("Номер существует!"))
                                         emitter.onNext(true);
