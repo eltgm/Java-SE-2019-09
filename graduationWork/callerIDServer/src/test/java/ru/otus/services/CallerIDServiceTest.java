@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
 import org.junit.jupiter.params.provider.CsvSource;
-import ru.otus.exceptions.CallerNotFoundException;
 import ru.otus.models.Caller;
 import ru.otus.repositories.CallersRepository;
 
@@ -39,10 +38,7 @@ public class CallerIDServiceTest {
                 .telephoneNumber("")
                 .build());
 
-        if (userExists)
-            assertFalse(createResult);
-        else
-            assertTrue(createResult);
+        assertTrue(createResult.isStatus());
     }
 
     @DisplayName("Тестирование получения абонента в ситуациях, когда ")
@@ -60,8 +56,7 @@ public class CallerIDServiceTest {
 
             assertNotNull(getUserResult);
         } else {
-            assertThrows(CallerNotFoundException.class,
-                    () -> callerIDService.getCallerByNumber(anyString()));
+            assertNull(callerIDService.getCallerByNumber(anyString()).getTelephoneNumber());
         }
     }
 }
