@@ -1,12 +1,11 @@
 package ru.otus.calleridclient.data;
 
 import io.reactivex.Observable;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import ru.otus.calleridclient.models.Caller;
 import ru.otus.calleridclient.models.Message;
 
@@ -17,5 +16,6 @@ public interface CallerServerAPI {
                                      @Field("description") String description);
 
     @GET("caller/get")
-    Observable<Caller> getCaller(String telephoneNumber);
+    Observable<Caller> getCaller(@Query("telephoneNumber") String telephoneNumber);
+
 }

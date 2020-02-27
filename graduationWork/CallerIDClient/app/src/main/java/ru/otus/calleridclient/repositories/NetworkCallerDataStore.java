@@ -65,4 +65,9 @@ public class NetworkCallerDataStore implements CallerDataStore {
     public Observable<Boolean> removeCaller(Caller caller) {
         return Observable.create(Emitter::onComplete);
     }
+
+    @Override
+    public Observable<Caller> getCallerById(String phoneNumber) {
+        return callerServerAPI.getCaller(phoneNumber);
+    }
 }

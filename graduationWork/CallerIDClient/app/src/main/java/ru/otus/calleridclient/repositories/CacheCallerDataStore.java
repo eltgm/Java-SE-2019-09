@@ -59,4 +59,9 @@ public class CacheCallerDataStore implements CallerDataStore {
             emitter.onComplete();
         });
     }
+
+    @Override
+    public Observable<Caller> getCallerById(String phoneNumber) {
+        return Observable.empty();
+    }
 }

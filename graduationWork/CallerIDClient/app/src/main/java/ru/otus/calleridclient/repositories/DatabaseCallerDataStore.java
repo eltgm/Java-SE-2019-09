@@ -59,4 +59,9 @@ public class DatabaseCallerDataStore implements CallerDataStore {
             emitter.onComplete();
         });
     }
+
+    @Override
+    public Observable<Caller> getCallerById(String phoneNumber) {
+        return callerDao.getById(phoneNumber).toObservable();
+    }
 }

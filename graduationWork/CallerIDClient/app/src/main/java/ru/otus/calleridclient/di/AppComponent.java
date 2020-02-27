@@ -1,10 +1,9 @@
 package ru.otus.calleridclient.di;
 
-import android.content.Context;
-
 import javax.inject.Singleton;
 
 import dagger.Component;
+import ru.otus.calleridclient.presentation.presenter.CallPresenter;
 import ru.otus.calleridclient.presentation.presenter.CategoriesPresenter;
 import ru.otus.calleridclient.presentation.presenter.MainPresenter;
 import ru.otus.calleridclient.presentation.presenter.SpamerInfoPresenter;
@@ -18,5 +17,7 @@ public interface AppComponent {
 
     void injectSpamerPresenter(SpamerInfoPresenter spamerInfoPresenter);
 
-    Context provideContext();
+    void injectCallPresenter(CallPresenter spamerInfoPresenter);
+
+    //Context provideContext();
 }

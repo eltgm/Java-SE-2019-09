@@ -16,4 +16,6 @@ public interface CallerDataStore {
     Observable<Boolean> saveCaller(Caller caller);
 
     Observable<Boolean> removeCaller(Caller caller);
+
+    Observable<Caller> getCallerById(String phoneNumber);
 }

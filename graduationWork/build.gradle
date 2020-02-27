@@ -1,0 +1,89 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        
+    }
+}
+
+subprojects {
+    if (this.name == 'callerIDClient:app' || this.name == 'callerIDClient') {
+        apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+apply plugin: 'com.neenbedankt.android-apt'
+        android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "ru.otus.calleridclient"
+        minSdkVersion 24
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+    dependencies { 
+        if (this.name != 'graduationWork')
+            implementation project(':graduationWork')
+
+        compileOnly 'org.projectlombok:lombok:1.16.18'
+        annotationProcessor 'org.projectlombok:lombok:1.16.18'
+
+        compileOnly 'javax.annotation:jsr250-api:1.0'
+        implementation 'android.arch.persistence.room:runtime:1.1.1'
+        annotationProcessor 'android.arch.persistence.room:compiler:1.1.1'
+        implementation 'android.arch.persistence.room:rxjava2:1.1.1'
+    }
+    } else if (this.name == 'callerIDServer') {
+        apply plugin: 'java'
+    } /*else if(this.name == 'callerIDClient') {
+        apply plugin: 'com.android.library'
+
+        buildscript {
+    repositories {
+        google()
+        jcenter()
+        
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.3'
+        
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        
+    }
+}
+    }*/
+}

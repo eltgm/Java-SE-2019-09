@@ -82,6 +82,7 @@ public class SpamerInfoActivity extends MvpAppCompatActivity implements AddSpame
         else
             initViewForShowInfo(new Gson().fromJson(spamer, Caller.class));
 
+
         rvCategories.setHasFixedSize(true);
         rvCategories.setLayoutManager(new GridLayoutManager(this, 3));
         rvCategories.setAdapter(chosenSpamTypeAdapter);
@@ -90,6 +91,18 @@ public class SpamerInfoActivity extends MvpAppCompatActivity implements AddSpame
     private void initViewForShowInfo(Caller caller) {
         toolbarInfo.setText("Информация о спамере");
 
+        etPhoneNumber.setInputType(InputType.TYPE_CLASS_NUMBER);
+        etPhoneNumber.setKeyListener(DigitsKeyListener.getInstance("1234567890+-() "));
+        final MaskedTextChangedListener listener = MaskedTextChangedListener.Companion.installOn(
+                etPhoneNumber,
+                "+7 ([000]) [000]-[00]-[00]",
+                (maskFilled, extractedValue, formattedValue) -> {
+                    Log.d("TAG", extractedValue);
+                    Log.d("TAG", String.valueOf(maskFilled));
+                }
+        );
+
+        etPhoneNumber.setHint(listener.placeholder());
         etPhoneNumber.setText(caller.getTelephoneNumber());
         etComments.setText(caller.getDescription());
         chosenSpamTypeAdapter.setItems(caller.getSpamCategories());
@@ -114,6 +127,7 @@ public class SpamerInfoActivity extends MvpAppCompatActivity implements AddSpame
         );
 
         etPhoneNumber.setHint(listener.placeholder());
+        etPhoneNumber.setText(getIntent().getStringExtra("phoneNumber"));
     }
 
     @OnClick(R.id.buttonDone)

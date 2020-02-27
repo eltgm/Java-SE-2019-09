@@ -15,6 +15,11 @@ public class CallerIDServiceImpl implements CallerIDService {
 
     @Override
     public Message createCaller(Caller caller) {
+        caller.setTelephoneNumber(caller.getTelephoneNumber()
+                .replace("(", "")
+                .replace(")", "")
+                .replace(" ", "")
+                .replace("-", ""));
         callersRepository.save(caller);
 
         return Message.builder()

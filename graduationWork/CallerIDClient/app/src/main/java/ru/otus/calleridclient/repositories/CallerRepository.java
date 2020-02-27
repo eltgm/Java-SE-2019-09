@@ -29,6 +29,18 @@ public class CallerRepository {
         this.networkCallerDataStore = networkCallerDataStore;
     }
 
+    public Observable<Caller> getCallerByIdFromDB(String phoneNumber) {
+        return databaseCallerDataStore.getCallerById(phoneNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<Caller> getCallerByIdFromNetwork(String phoneNumber) {
+        return networkCallerDataStore.getCallerById(phoneNumber)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
     private Observable<List<SpamType>> getSpamTypesFromMemory() {
         return cacheCallerDataStore.getSpamTypes();
     }
@@ -85,6 +97,12 @@ public class CallerRepository {
     }
 
     public Observable<Boolean> createCaller(Caller caller) {
+        caller.setTelephoneNumber(caller.getTelephoneNumber()
+                .replace("(", "")
+                .replace(")", "")
+                .replace(" ", "")
+                .replace("-", ""));
+
         return Observable.merge(databaseCallerDataStore.saveCaller(caller),
                 cacheCallerDataStore.saveCaller(caller), networkCallerDataStore.saveCaller(caller))
                 .subscribeOn(Schedulers.io())

@@ -1,6 +1,7 @@
 package ru.otus.calleridclient.models;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -32,6 +33,8 @@ public class Caller {
     private String telephoneNumber;
     @TypeConverters({SpamTypeConverter.class})
     private List<String> spamCategories;
+    @Ignore
+    private boolean fromDB;
     private String description;
 
     @Override

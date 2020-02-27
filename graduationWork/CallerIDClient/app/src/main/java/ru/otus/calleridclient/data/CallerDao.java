@@ -8,7 +8,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import io.reactivex.Single;
+import io.reactivex.Maybe;
 import ru.otus.calleridclient.models.Caller;
 
 @Dao
@@ -17,7 +17,7 @@ public interface CallerDao {
     Flowable<List<Caller>> getAll();
 
     @Query("SELECT * FROM caller WHERE telephoneNumber = :telephoneNumber")
-    Single<Caller> getById(String telephoneNumber);
+    Maybe<Caller> getById(String telephoneNumber);
 
     @Insert
     long insert(Caller caller);
