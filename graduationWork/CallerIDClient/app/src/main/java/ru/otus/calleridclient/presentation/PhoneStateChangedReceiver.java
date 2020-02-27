@@ -36,8 +36,12 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver implements Call
     public void onReceive(Context context, Intent intent) {
         this.context = context;
 
+
         String phoneState = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         if (phoneState.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            RingTypeSingleton.getInstance().ringerMode = audioManager.getRingerMode();
+
             String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
             if (incomingNumber != null) {
                 if (!incomingNumber.isEmpty()) {
@@ -78,7 +82,12 @@ public class PhoneStateChangedReceiver extends BroadcastReceiver implements Call
             context.startActivity(intent);
         });
         Button buttonClose = windowLayout.findViewById(R.id.buttonNotSpam);
-        buttonClose.setOnClickListener(v -> closeWindow(context));
+        buttonClose.setOnClickListener(v -> {
+            if (windowLayout != null) {
+                windowManager.removeView(windowLayout);
+                windowLayout = null;
+            }
+        });
 
         if (caller != null) {
             textView.setText(caller.getDescription().isEmpty() ? caller.getTelephoneNumber() : caller.getDescription());
