@@ -14,6 +14,10 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+
+    }
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
         release {
@@ -33,10 +37,14 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
-    compileOnly 'org.projectlombok:lombok:1.16.18'
-    annotationProcessor 'org.projectlombok:lombok:1.16.18'
+    implementation 'org.projectlombok:lombok:1.16.20'
+    annotationProcessor 'org.projectlombok:lombok:1.16.20'
 
-    compileOnly 'javax.annotation:jsr250-api:1.0'
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    implementation "android.arch.persistence.room:rxjava2:1.1.1"
+
+    implementation 'javax.annotation:jsr250-api:1.0'
 
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
@@ -61,9 +69,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.18'
 
-    implementation "android.arch.persistence.room:runtime:1.1.1"
-    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
-    implementation "android.arch.persistence.room:rxjava2:1.1.1"
-
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.1'
+
+    implementation 'com.github.pengrad:jdk9-deps:1.0'
 }
