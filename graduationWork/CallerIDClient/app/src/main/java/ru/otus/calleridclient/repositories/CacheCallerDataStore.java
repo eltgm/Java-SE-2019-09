@@ -37,7 +37,7 @@ public class CacheCallerDataStore implements CallerDataStore {
     @Override
     public Observable<List<Caller>> getCallers() {
         return Observable.create(emitter -> {
-            if (this.callers.size() > 0)
+            if (!this.callers.isEmpty())
                 emitter.onNext(this.callers);
             emitter.onComplete();
         });

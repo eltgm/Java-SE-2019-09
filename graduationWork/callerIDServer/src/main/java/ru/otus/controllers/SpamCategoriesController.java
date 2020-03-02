@@ -14,7 +14,7 @@ public class SpamCategoriesController {
         this.spamCategoriesService = spamCategoriesService;
     }
 
-    @GetMapping("/spam/categories/get")
+    @GetMapping("/spam/categories")
     public List<String> getSpamCategories() {
         return spamCategoriesService.getSpamTypes();
     }

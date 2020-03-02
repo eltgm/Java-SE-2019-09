@@ -19,14 +19,14 @@ public class CallerIDController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/caller/add")
+    @PostMapping("/caller")
     public Message addCaller(CallerDTO callerDTO) {
         final var caller = modelMapper.map(callerDTO, Caller.class);
 
         return callerIDService.createCaller(caller);
     }
 
-    @GetMapping("/caller/get")
+    @GetMapping("/caller")
     public Caller getCaller(String telephoneNumber) {
         return callerIDService.getCallerByNumber(telephoneNumber);
     }

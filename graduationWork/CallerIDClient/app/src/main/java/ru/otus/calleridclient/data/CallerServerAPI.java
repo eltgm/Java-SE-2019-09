@@ -11,11 +11,11 @@ import ru.otus.calleridclient.models.Message;
 
 public interface CallerServerAPI {
     @FormUrlEncoded
-    @POST("caller/add")
+    @POST("caller")
     Observable<Message> createCaller(@Field("telephoneNumber") String telephoneNumber, @Field("spamCategories") String spamCategories,
                                      @Field("description") String description);
 
-    @GET("caller/get")
+    @GET("caller")
     Observable<Caller> getCaller(@Query("telephoneNumber") String telephoneNumber);
 
 }
