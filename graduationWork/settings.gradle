@@ -1,5 +1,0 @@
-rootProject.name = 'graduationWork'
-
-include 'callerIDServer'
-include 'callerIDClient'
-include 'callerIDClient:app'
