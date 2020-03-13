@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+    android:layout_centerVertical="true"
+    android:layout_gravity="top"
+    android:background="#80008577"
+    android:backgroundTint="#80008577"
+    android:foregroundGravity="center"
+    android:gravity="top"
+    android:orientation="vertical"
+    android:windowAnimationStyle="@android:style/Animation.Translucent"
+    android:windowBackground="@android:color/transparent"
+    android:windowIsTranslucent="true">
+
+    <Button
+        android:id="@+id/buttonSpam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="100dp"
+        android:backgroundTint="#FFFFFF"
+        android:text="СПАМ!"
+        android:textColor="@color/colorPrimary" />
+
+    <Button
+        android:id="@+id/buttonNotSpam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/buttonSpam"
+        android:backgroundTint="#FFFFFF"
+        android:text="НЕ СПАМ!"
+        android:textColor="@color/colorPrimary" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonSpam"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="35dp"
+        android:text="Спамер!"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="100dp"
+        tools:itemCount="1"
+        tools:listitem="@layout/item_chosen_categories" />
+</RelativeLayout>
