@@ -28,8 +28,6 @@ import ru.otus.calleridclient.models.converters.SpamTypeConverter;
 public class Caller {
     @PrimaryKey(autoGenerate = true)
     private long id;
-    @SerializedName("telephoneNumber")
-    @Expose
     private String telephoneNumber;
     @TypeConverters({SpamTypeConverter.class})
     private List<String> spamCategories;
