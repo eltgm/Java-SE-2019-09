@@ -17,7 +17,7 @@
         <javax.json-api.version>1.1.4</javax.json-api.version>
         <javax.json.version>1.1.4</javax.json.version>
         <h2.version>1.4.197</h2.version>
-        <hibernate-core.version>5.4.4.Final</hibernate-core.version>
+        <hibernate-core.version>5.4.24.Final</hibernate-core.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
         <mockito-core.version>3.0.0</mockito-core.version>
         <apache.commons.collections>4.1</apache.commons.collections>
